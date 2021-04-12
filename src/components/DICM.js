@@ -5,10 +5,11 @@ import axios from 'axios'
 import {Pagination, PageHeader, Button, Descriptions,} from 'antd'
 import Edit_svg from "../assets/images/svg/edit.svg"
 import Del_svg from "../assets/images/svg/del.svg"
-import {Upload, message, Image} from 'antd'
+import {Upload, message, Image, Card} from 'antd'
 import {UploadOutlined, EditOutlined, FormOutlined} from '@ant-design/icons';
 import InputBox from "./small_comp/InputBox"
 import ReactPlayer from 'react-player'
+import Select from "./small_comp/select";
 
 class DICM extends React.Component {
     constructor(props) {
@@ -63,46 +64,56 @@ class DICM extends React.Component {
                         title="相册"
                         subTitle="This is a subtitle"
                         extra={[
-                            <Button key="1">添加链接</Button>,
-                            <Button key="2" type="">切换视图</Button>,
                             <Upload {...props}>
                                 <Button key={"3"} icon={<UploadOutlined/>}>上传文件</Button>
                             </Upload>,
                         ]}
                     >
-                        <Descriptions size="small" column={3}>
-                            <Descriptions.Item label="文件名"/>
-                            <Descriptions.Item>
-                                <small id={"daxiao"}>大小</small>
-                            </Descriptions.Item>
-                            <Descriptions.Item>
-                                <small id={"shijian"}>时间</small>
-                            </Descriptions.Item>
-                        </Descriptions>
                     </PageHeader>
                     {/*----------------------------------------数据------------------------------------------------*/}
                 </div>
-                {
-                    data.map((value, key) => {
-                        return (
-                            <span className={"pic_content"}>
-                                <Image width={150} height={100} src={value} alt={"图片"}/>
+                {/*<div className={"pic_content"}>*/}
+                {/*{*/}
+                {/*data.map((value, key) => {*/}
+                {/*return (*/}
+                {/*<span className={"pic_box"}>*/}
+                {/*<Card   hoverable*/}
+                {/*style = {{width:180,height:180}}*/}
+                {/*cover={<img alt="example" style = {{width:180,height:120}} src={value}/>}*/}
+                {/*>*/}
+                {/*<small>图片描述</small>*/}
+                {/*</Card>*/}
+                {/*</span>*/}
+                {/*)*/}
+                {/*})*/}
+                {/*}*/}
+                {/*</div>*/}
+                <div className={"pic_content"}>
+                    {
+                        data.map((value, key) => {
+                            return (
+                                <span className={"pic_box"}>
+                                <Image width={145} height={100} src={value} alt={"图片"}/><br/>
+                                <small>图片</small>
                             </span>
-                        )
-                    })
-                }
+                            )
+                        })
+                    }
+                </div>
                 <img id={"edit_img"} src={this.state.Edit_svg === true ? Edit_svg : Del_svg}
                      onClick={this.del_or_edit}/>
                 {/*--------------------------------------------------尾部-----------------------------------------------*/}
-                <Pagination
-                    total={this.state.total}
-                    current={this.state.current}
-                    pageSize={this.state.pageSize}
-                    onChange={this.onchange}
-                    showTotal={e => {
-                        return '共' + e + '页';
-                    }}
-                />
+                <div id={"dcim_pagi"}>
+                    <Pagination
+                        total={this.state.total}
+                        current={this.state.current}
+                        pageSize={this.state.pageSize}
+                        onChange={this.onchange}
+                        showTotal={e => {
+                            return '共' + e + '张';
+                        }}
+                    />
+                </div>
             </div>
         )
     }

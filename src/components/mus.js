@@ -1,12 +1,10 @@
 import React from 'react';
 import "antd/dist/antd.css"
-// import "../assets/css/index.css"
 import axios from 'axios'
 import Jpg from "../assets/images/FileType/jpg.jpg"
 import Mp4 from "../assets/images/FileType/mp4.jpg"
 import Mp3 from "../assets/images/FileType/mp3.png"
 import Doc from "../assets/images/FileType/doc.jpg"
-// import ReactPullToRefresh from 'react-pull-to-refresh'
 import {List, Avatar, Pagination, PageHeader, Button, Descriptions,} from 'antd'
 import LikeBtn from "./small_comp/LikeBtn"
 import Edit_title from "./small_comp/Edit_title"
@@ -14,12 +12,11 @@ import Edit_svg from "../assets/images/svg/edit.svg"
 import Del_svg from "../assets/images/svg/del.svg"
 import {Upload, message} from 'antd'
 import {UploadOutlined, EditOutlined} from '@ant-design/icons';
-import InputBox from "./small_comp/InputBox"
 import Select from "./small_comp/select"
 import AddLink from "./small_comp/AddLink"
 
 
-class AllFiles extends React.Component {
+class Mus extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,8 +26,7 @@ class AllFiles extends React.Component {
             pageSize: 10,
             total: 30,
             pageNumber: parseInt(window.location.hash.slice(1), 0) || 1,//获取当前页面的hash值，转换为number类型
-            selected: [],
-            files: []
+            selected: []
         }
     }
 
@@ -41,14 +37,19 @@ class AllFiles extends React.Component {
     callAPI = () => {
         axios.get('https://qc8vvg.fn.thelarkcloud.com/newest_', {params: {pageNum: 0, news_num: 15}})
             .then((res) => {
+                var temp = [];
                 for (var i = 0; i < res.data.newslist.length; i++) {
                     res.data.newslist[i].createdAt = this.decodeTimeStamp(new Date(res.data.newslist[i].createdAt).getTime());
-                    if (res.data.newslist[i].comment_id === undefined) res.data.newslist[i].comment_id = 0
-                    else res.data.newslist[i].comment_id = eval('([' + res.data.newslist[i].comment_id + '])').length
+                    if (res.data.newslist[i].title.split('.').length > 1) {
+                        if (res.data.newslist[i].title.split('.')[1] === 'mp3') {
+                            temp.push(res.data.newslist[i]);
+                        }
+                    }
                     if (res.data.newslist[i].title.length > 37) res.data.newslist[i].title = res.data.newslist[i].title.substring(0, 36) + '...'
                 }
+                console.log(temp);
                 this.setState({
-                    list: res.data.newslist
+                    list: temp
                 })
             })
             .catch((err) => {
@@ -62,23 +63,6 @@ class AllFiles extends React.Component {
     };
     AddLink = () => {
         document.getElementById("add_link").style.display = "block";
-    };
-    handleFileChange = (e) => {
-        this.setState({
-            files: e.target.files
-        })
-        console.log(e.target.files);
-    };
-    handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData();
-        for (var x = 0; x < this.state.files.length; x++) {
-            data.append('file', this.state.files[x])
-        }
-        axios.post("http://localhost:9000/upload", data)
-            .then(res => {
-                console.log(res.statusText)
-            })
     }
 
     render() {
@@ -110,18 +94,6 @@ class AllFiles extends React.Component {
                         </Descriptions>
                     </PageHeader>
                     <AddLink/>
-                    <input
-                        className="form-control-file mb-3"
-                        type="file" id="file"
-                        accept=".*"
-                        multiple
-                        onChange={this.handleFileChange}
-                    />
-                    <button
-                        className="btn btn-primary mt-3"
-                        onClick={this.handleSubmit}
-                    >Upload
-                    </button>
                 </div>
                 {
                     <List
@@ -152,7 +124,7 @@ class AllFiles extends React.Component {
                                                 this.editname()
                                             }}/>
                                         <small id={'list_time'}>{item.createdAt}</small>
-                                        <small id={"file_space_value"}>{item.like}MB</small>
+                                        <small id={"file_space_value"}>{item.like}KB</small>
                                         <LikeBtn/>
                                     </span>}
                                         // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
@@ -298,6 +270,26 @@ class AllFiles extends React.Component {
         }
         return '刚刚';
     }
+    loadmore = () => {
+        this.state.news_num = 3 + this.state.news_num
+        axios.get('https://qc8vvg.fn.thelarkcloud.com/newest_', {params: {pageNum: 0, news_num: this.state.news_num}})
+            .then((res) => {
+                for (var i = 0; i < res.data.newslist.length; i++) {
+                    res.data.newslist[i].createdAt = this.decodeTimeStamp(new Date(res.data.newslist[i].createdAt).getTime())
+                    if (res.data.newslist[i].comment_id == undefined) res.data.newslist[i].comment_id = 0
+                    else res.data.newslist[i].comment_id = eval('([' + res.data.newslist[i].comment_id + '])').length
+                    if (res.data.newslist[i].title.length > 37) res.data.newslist[i].title = res.data.newslist[i].title.substring(0, 36) + '...'
+                }
+                // console.log(res)
+                this.setState({
+                    list: res.data.newslist
+                })
+
+            })
+            .catch((err) => {
+                alert("没有更多")
+            })
+    }
 }
 
 const props = {
@@ -318,4 +310,4 @@ const props = {
     },
 };
 
-export default AllFiles;
+export default Mus;

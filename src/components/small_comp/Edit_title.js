@@ -14,14 +14,9 @@ class Edit_title extends React.Component {
     //     })
     // }
     OnChange = (e) => {
-        if (e.keyCode === 13) {
-            this.Submit(e);
-            console.log("13");
-        } else {
-            this.setState({
-                filename: e.target.value
-            });
-        }
+        this.setState({
+            filename: e.target.value
+        });
     };
     Submit = (e) => {
         console.log("修改为" + e.target.value);

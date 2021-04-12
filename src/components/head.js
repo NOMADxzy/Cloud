@@ -42,7 +42,7 @@ class Head extends React.Component {
                 <Link to="/More"><b>更多</b></Link>
                 <span className={"dropdown"}>
                     <img id="man_svg" src={Man_svg}/>
-                    <strong className="username">{this.state.name}</strong>
+                    <strong className="username" id={"username"}>{this.state.name}</strong>
                     <img className={"circle_img"} src={this.state.head_img}/>
                     <div className={"dropdown_content"}>
                         <a>更改头像</a>

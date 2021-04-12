@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Link} from 'react-router-dom';
 import axios from "axios";
 import Comment from './comments';
-import LikeBtn from './LikeBtn'
+import Pic from './pic'
 import HateBtn from './HateBtn'
 
 class Content extends React.Component {
@@ -135,7 +135,7 @@ class Content extends React.Component {
                         })
                     }
                 </div>
-                <LikeBtn article_state={this.state}/>
+                <Pic article_state={this.state}/>
                 <HateBtn article_state={this.state}/>
 
                 <div>

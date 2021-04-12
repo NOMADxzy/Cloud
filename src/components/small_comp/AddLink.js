@@ -9,37 +9,29 @@ const tailLayout = {
     wrapperCol: {offset: 8, span: 16},
 };
 
-// const Demo = () => {
-//
-// }
 
-class InputBox extends React.Component {
+class AddLink extends React.Component {
     constructor(props) {
         super(props);
     }
 
     onFinish = (values: any) => {
         console.log('Success:', values);
-        this.props.set_user(values.username);
-        document.getElementById("input_box").style.display = "none";
-        message.success("登录成功");
+        document.getElementById("add_link").style.display = "none";
+        message.success("添加成功");
     };
 
     onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
-        message.error("账号或密码错误");
+        message.error("提取码错误");
     };
     cancel = () => {
-        if (document.getElementById("username").innerHTML === "未登录") {
-            message.warn("请先登录");
-        } else {
-            document.getElementById("input_box").style.display = "none";
-        }
+        document.getElementById("add_link").style.display = "none";
     }
 
     render() {
         return (
-            <div id={"input_box"}>
+            <div id={"add_link"}>
                 <Form
                     {...layout}
                     name="basic"
@@ -48,23 +40,19 @@ class InputBox extends React.Component {
                     onFinishFailed={this.onFinishFailed}
                 >
                     <Form.Item
-                        label="Username"
-                        name="username"
-                        rules={[{required: true, message: 'Please input your username!'}]}
+                        label="链接"
+                        name="link"
+                        rules={[{required: true, message: '请输入链接!'}]}
                     >
                         <Input/>
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[{required: true, message: 'Please input your password!'}]}
+                        label="提取码"
+                        name="code"
+                        rules={[{required: true, message: '提取码不能为空!'}]}
                     >
-                        <Input.Password/>
-                    </Form.Item>
-
-                    <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                        <Checkbox>Remember me</Checkbox>
+                        <Input/>
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>
@@ -79,4 +67,4 @@ class InputBox extends React.Component {
     }
 }
 
-export default InputBox;
+export default AddLink;
