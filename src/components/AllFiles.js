@@ -55,6 +55,24 @@ class AllFiles extends React.Component {
                 console.log(err)
             })
     };
+    callAPI_get = () => {
+        axios.get('http://localhost:9000/testget?UID=123',)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    };
+    callAPI_post = () => {
+        axios.post('http://localhost:9000/testpost', {UID: "123"})
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    };
     PageChange = (page) => {
         this.setState({
             pageNumber: page
@@ -117,11 +135,9 @@ class AllFiles extends React.Component {
                         multiple
                         onChange={this.handleFileChange}
                     />
-                    <button
-                        className="btn btn-primary mt-3"
-                        onClick={this.handleSubmit}
-                    >Upload
-                    </button>
+                    <button onClick={this.handleSubmit}>Upload</button>
+                    <button onClick={this.callAPI_get}>get</button>
+                    <button onClick={this.callAPI_post}>post</button>
                 </div>
                 {
                     <List
