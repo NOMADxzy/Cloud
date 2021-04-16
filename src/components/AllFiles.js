@@ -12,13 +12,11 @@ import LikeBtn from "./small_comp/LikeBtn"
 import Edit_title from "./small_comp/Edit_title"
 import Edit_svg from "../assets/images/svg/edit.svg"
 import Del_svg from "../assets/images/svg/del.svg"
-import {Upload, message} from 'antd'
-import {UploadOutlined, EditOutlined} from '@ant-design/icons';
-import InputBox from "./small_comp/InputBox"
+import Down_svg from "../assets/images/svg/download.svg"
+import {RedoOutlined} from '@ant-design/icons';
+import MyUpload from "./small_comp/MyUpload"
 import Select from "./small_comp/select"
 import AddLink from "./small_comp/AddLink"
-
-
 class AllFiles extends React.Component {
     constructor(props) {
         super(props);
@@ -81,23 +79,6 @@ class AllFiles extends React.Component {
     AddLink = () => {
         document.getElementById("add_link").style.display = "block";
     };
-    handleFileChange = (e) => {
-        this.setState({
-            files: e.target.files
-        })
-        console.log(e.target.files);
-    };
-    handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData();
-        for (var x = 0; x < this.state.files.length; x++) {
-            data.append('file', this.state.files[x])
-        }
-        axios.post("http://localhost:9000/upload", data)
-            .then(res => {
-                console.log(res.statusText)
-            })
-    }
 
     render() {
         var data = this.state.list;
@@ -111,10 +92,8 @@ class AllFiles extends React.Component {
                         subTitle=""
                         extra={[
                             <Button key="1" onClick={this.AddLink}>添加链接</Button>,
-                            <Button key="2" type="">切换视图</Button>,
-                            <Upload {...props}>
-                                <Button key={"3"} icon={<UploadOutlined/>}>上传文件</Button>
-                            </Upload>,
+                            <Button key="2" icon={<RedoOutlined/>}>刷新</Button>,
+                            <MyUpload/>,
                         ]}
                     >
                         <Descriptions size="small" column={3}>
@@ -128,14 +107,6 @@ class AllFiles extends React.Component {
                         </Descriptions>
                     </PageHeader>
                     <AddLink/>
-                    <input
-                        className="form-control-file mb-3"
-                        type="file" id="file"
-                        accept=".*"
-                        multiple
-                        onChange={this.handleFileChange}
-                    />
-                    <button onClick={this.handleSubmit}>Upload</button>
                     <button onClick={this.callAPI_get}>get</button>
                     <button onClick={this.callAPI_post}>post</button>
                 </div>
@@ -180,6 +151,7 @@ class AllFiles extends React.Component {
                 }
                 <img id={"edit_img"} src={this.state.Edit_svg === true ? Edit_svg : Del_svg}
                      onClick={this.del_or_edit.bind(this, data)}/>
+                <img id={"down_img"} src={Down_svg}/>
                 <div className={"pagination"}><Pagination showToal={2}
                     // defaultPageSize={3}
                                                           showQuickJumper
@@ -208,6 +180,7 @@ class AllFiles extends React.Component {
             for (let i = 0; i < htmlCollection.length; i++) {
                 htmlCollection[i].style.display = "inline";
             }
+            document.getElementById("down_img").style.display = "block";
         } else {
             for (let i = 0; i < htmlCollection.length; i++) {
                 htmlCollection[i].style.display = "none";
@@ -221,7 +194,7 @@ class AllFiles extends React.Component {
                 data.splice(selecteddata[i] - i, 1)
             }
             this.state.selected = [];
-            // this.child.componentWillReceiveProps();
+            document.getElementById("down_img").style.display = "none";
         }
     };
     editname = () => {
@@ -315,23 +288,5 @@ class AllFiles extends React.Component {
         return '刚刚';
     }
 }
-
-const props = {
-    name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-        authorization: 'authorization-text',
-    },
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-};
 
 export default AllFiles;

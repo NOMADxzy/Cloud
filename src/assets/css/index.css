@@ -248,7 +248,15 @@ article {
     bottom: 5%;
     right: 8%;
     cursor: pointer;
-    /*box-shadow: 0px 5px 5px #cccccc;*/
+}
+
+#down_img {
+    width: 3.5%;
+    position: fixed;
+    bottom: 16%;
+    right: 8%;
+    cursor: pointer;
+    display: none;
 }
 
 /*选择组件*/
