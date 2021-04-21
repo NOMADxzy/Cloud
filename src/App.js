@@ -50,10 +50,10 @@ class App extends React.Component {
                     <Tab appstate={this.state}/>
                     <article className={'left'}>
                         <Route exact path="/" component={Files}/>
-                        <Route exact path="/:UID" component={Files}/>
-                        <Route path="/:UID/useage" component={Useage}/>
-                        <Route exact path="/:UID/:type" component={Files}/>
                         <Route path="/DICM" component={DICM}/>
+                        {/*<Route exact path="/:UID" component={Files}/>*/}
+                        <Route exact path="/:UID/:type" component={Files}/>
+                        <Route path="/:UID/useage" component={Useage}/>
 
                     </article>
                     {/*<Me/>*/}

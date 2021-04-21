@@ -309,12 +309,13 @@ article {
 
 /*DICM样式*/
 .pic_box {
-    /*margin: 6px;*/
     padding-top: 2%;
     padding-left: 1%;
     padding-right: 1%;
-    /*width: 150px;*/
+    width: 11.5em;
+    height: 11em;
     float: left;
+    overflow: hidden;
 }
 
 .pic_box:hover {
@@ -322,11 +323,19 @@ article {
 }
 
 .pic_content {
-    min-height: 300px;
+    min-height: 80%;
 }
 
 #dcim_pagi {
-    float: bottom;
+    position: absolute;
+    top: 110%;
+    /*float: bottom;*/
+}
+
+.dcim_pic_name {
+    /*overflow: hidden;*/
+    /*max-width: 145px;*/
+    text-overflow: ellipsis;
 }
 
 /*使用详情*/

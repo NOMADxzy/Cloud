@@ -7,7 +7,7 @@ import Mp4 from "../assets/images/FileType/mp4.jpg"
 import Mp3 from "../assets/images/FileType/mp3.png"
 import Doc from "../assets/images/FileType/doc.jpg"
 // import ReactPullToRefresh from 'react-pull-to-refresh'
-import {List, Avatar, Pagination, PageHeader, Button, Descriptions,} from 'antd'
+import {List, Avatar, Pagination, PageHeader, Button, Descriptions, message} from 'antd'
 import LikeBtn from "./small_comp/LikeBtn"
 import Edit_title from "./small_comp/Edit_title"
 import Edit_svg from "../assets/images/svg/edit.svg"
@@ -71,6 +71,17 @@ class FileList extends React.Component {
             })
     };
 
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({
+                pageNumber: 1,
+                UID: this.props.match.params.UID,
+                type: this.props.match.params.type
+            });
+            this.callAPI();
+        })
+    }
+
     componentWillReceiveProps() {
         setTimeout(() => {
             this.setState({
@@ -114,7 +125,7 @@ class FileList extends React.Component {
                         subTitle=""
                         extra={[
                             <Button key="1" onClick={this.AddLink}>添加链接</Button>,
-                            <Button key="2" icon={<RedoOutlined/>}>刷新</Button>,
+                            <Button key="2" onClick={this.callAPI} icon={<RedoOutlined/>}>刷新</Button>,
                             <MyUpload UID={this.state.UID}/>,
                         ]}
                     >
@@ -210,10 +221,15 @@ class FileList extends React.Component {
         }
         if (b === true) {// 点击了删除
             let selecteddata = this.state.selected;
-            console.log("发送" + selecteddata);
             selecteddata.sort();
-            for (let i = 0; i < selecteddata.length; i++) {
-                data.splice(selecteddata[i] - i, 1)
+            for (let i = selecteddata.length - 1; i >= 0; i--) {
+                let idx = selecteddata[i];
+                axios.post('http://localhost:9000/delete_file', {UID: this.state.UID, UUID: data[idx].UUID})
+                    .then((res) => {
+                        if (res.status === 200) message.success("删除了" + selecteddata.length + "个文件");
+                        else message.error("删除失败");
+                    }).catch(() => message.error("删除失败"));
+                data.splice(idx, 1)
             }
             this.state.selected = [];
             document.getElementById("down_img").style.display = "none";

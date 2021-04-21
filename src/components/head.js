@@ -41,7 +41,7 @@ class Head extends React.Component {
                          height={50}/>
                 <strong>CLoud云盘</strong>
                 </span>
-                <Link to="/"><b>云盘</b></Link>
+                <Link to={"/" + this.state.name + "/all"}><b>云盘</b></Link>
                 <Link to="/DICM"><b>相册</b></Link>
                 <Link to="/More"><b>更多</b></Link>
                 <span className={"dropdown"}>

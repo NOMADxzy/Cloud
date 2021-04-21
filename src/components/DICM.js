@@ -9,17 +9,18 @@ import {Upload, message, Image, Card} from 'antd'
 import {UploadOutlined, EditOutlined, FormOutlined} from '@ant-design/icons';
 import InputBox from "./small_comp/InputBox"
 import ReactPlayer from 'react-player'
-import Select from "./small_comp/select";
+import MyUpload from './small_comp/MyUpload'
 
 class DICM extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            UID: '',
             Edit_svg: true,
             list: [],
-            pageSize: 10,
-            total: 100,
-            current: parseInt(window.location.hash.slice(1), 0) || 1 //获取当前页面的hash值，转换为number类型
+            pageSize: 18,
+            total: 0,
+            PageNum: parseInt(window.location.hash.slice(1), 0) || 1 //获取当前页面的hash值，转换为number类型
         }
     }
 
@@ -28,28 +29,46 @@ class DICM extends React.Component {
         this.setState({
             Edit_svg: b
         })
-    }
+    };
 
     componentDidMount() {
-        this.getDatatest(1);
+        setTimeout(() => {
+            this.setState({UID: document.getElementById('username').innerText})
+            this.getDatatest();
+        })
     }
 
-    getDatatest = (page) => {
-        console.log("开始获取")
-        axios.get("http://localhost:9000/addnews")
+    getDatatest = () => {
+        let UID = this.state.UID;
+        axios.get('http://localhost:9000/get_numof_file', {params: {UID: UID, State: 1}})
+            .then((res) => {
+                this.setState({total: res.data[0]['COUNT(*)']})
+            })
+            .catch((err) => console.log(err));
+        axios.get("http://localhost:9000/get_user_file", {
+            params: {
+                UID: UID,
+                Del: 0,
+                PageSize: this.state.pageSize,
+                PageNum: this.state.PageNum,
+                State: 1
+            }
+        })
             .then((res) => {
                 console.log(res);
                 this.setState({
-                    list: res.data.src
+                    list: res.data
                 })
             })
-    }
+    };
     onchange = page => {
-        this.setState({
-            current: page
-        });
-        this.getDatatest(page);
-    }
+        setTimeout(() => {
+            this.setState({
+                PageNum: page
+            });
+            this.getDatatest();
+        })
+    };
 
     render() {
         var data = this.state.list;
@@ -64,37 +83,20 @@ class DICM extends React.Component {
                         title="相册"
                         subTitle="This is a subtitle"
                         extra={[
-                            <Upload {...props}>
-                                <Button key={"3"} icon={<UploadOutlined/>}>上传文件</Button>
-                            </Upload>,
+                            <MyUpload UID={this.state.UID}/>,
                         ]}
                     >
                     </PageHeader>
                     {/*----------------------------------------数据------------------------------------------------*/}
                 </div>
-                {/*<div className={"pic_content"}>*/}
-                {/*{*/}
-                {/*data.map((value, key) => {*/}
-                {/*return (*/}
-                {/*<span className={"pic_box"}>*/}
-                {/*<Card   hoverable*/}
-                {/*style = {{width:180,height:180}}*/}
-                {/*cover={<img alt="example" style = {{width:180,height:120}} src={value}/>}*/}
-                {/*>*/}
-                {/*<small>图片描述</small>*/}
-                {/*</Card>*/}
-                {/*</span>*/}
-                {/*)*/}
-                {/*})*/}
-                {/*}*/}
-                {/*</div>*/}
                 <div className={"pic_content"}>
                     {
                         data.map((value, key) => {
                             return (
                                 <span className={"pic_box"}>
-                                <Image width={145} height={100} src={value} alt={"图片"}/><br/>
-                                <small>图片</small>
+                                <Image width={145} height={100} src={"http://localhost:9000" + value.Path}
+                                       alt={"图片"}/><br/>
+                                <small className={'dcim_pic_name'}>{value.File_Name}</small>
                             </span>
                             )
                         })
@@ -106,7 +108,7 @@ class DICM extends React.Component {
                 <div id={"dcim_pagi"}>
                     <Pagination
                         total={this.state.total}
-                        current={this.state.current}
+                        current={this.state.PageNum}
                         pageSize={this.state.pageSize}
                         onChange={this.onchange}
                         showTotal={e => {
@@ -118,23 +120,5 @@ class DICM extends React.Component {
         )
     }
 }
-
-const props = {
-    name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-        authorization: 'authorization-text',
-    },
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-};
 
 export default DICM;
