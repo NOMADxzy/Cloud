@@ -29,6 +29,10 @@ class Head extends React.Component {
         })
     }
 
+    getName = () => {
+        return this.state.name;
+    }
+
     render() {
         return (
             <div className="head">

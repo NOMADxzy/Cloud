@@ -122,13 +122,28 @@ img.circle_img {
     /*font-size: 16px;*/
     margin: 4px 2px;
     cursor: pointer;
-    /*margin-left: 2px;*/
 }
 
 .search-wrapper input {
     height: 30px;
     margin-bottom: 5px;
     font-size: 14px;
+    outline-style: none;
+
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    /*padding: 13px 14px;*/
+    /*width: 620px;*/
+    /*font-size: 14px;*/
+    /*font-weight: 700;*/
+    font-family: "Microsoft soft";
+}
+
+.search-wrapper input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
 }
 
 /*侧边栏路由样式*/
@@ -140,7 +155,6 @@ img.circle_img {
     float: left;
     position: fixed;
 }
-
 .tab li {
     /*display: flex;*/
     margin: 20px;
@@ -182,13 +196,13 @@ article {
 #daxiao {
     font-size: 1em;
     position: absolute;
-    right: 22%;
+    right: 24%;
 }
 
 #shijian {
     font-size: 1em;
     position: absolute;
-    right: 12%;
+    right: 15%;
 }
 
 /*单个文件条*/
@@ -209,7 +223,7 @@ article {
 
 .list_title_box input {
     height: 25px;
-    width: 25%;
+    width: 50%;
     display: none;
     position: absolute;
     left: 6%;
@@ -223,18 +237,15 @@ article {
 }
 
 #list_time {
-    margin-top: 4px;
+    margin-top: 5px;
     position: absolute;
-    left: 75%;
-
+    left: 73%;
 }
 
 #file_space_value {
-    /*float: right;*/
-    /*margin-right: 15%;*/
-    margin-top: 4px;
+    margin-top: 5px;
     position: absolute;
-    left: 85%;
+    right: 14%;
 }
 
 .pagination {
@@ -426,6 +437,7 @@ article {
     width: 640px;
     display: flex;
     flex-direction: row;
+    height: 45px;
     height: 45px;
 
     margin-bottom: 10px;

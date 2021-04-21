@@ -12,13 +12,25 @@ class LikeBtn extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({
-            id: this.props.fid
+        setTimeout(() => {
+            this.setState({
+                id: this.props.filestate.UUID,
+                isliked: this.props.filestate.Collect == 1
+            })
+        })
+    }
+
+    componentWillReceiveProps() {
+        setTimeout(() => {
+            this.setState({
+                id: this.props.filestate.UUID,
+                isliked: this.props.filestate.Collect == 1
+            })
         })
     }
 
     change_like_state = () => {
-        var newstate = !this.state.isliked
+        var newstate = !this.state.isliked;
         this.setState({
             isliked: newstate
         })

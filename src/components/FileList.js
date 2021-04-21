@@ -12,61 +12,95 @@ import LikeBtn from "./small_comp/LikeBtn"
 import Edit_title from "./small_comp/Edit_title"
 import Edit_svg from "../assets/images/svg/edit.svg"
 import Del_svg from "../assets/images/svg/del.svg"
-import {Upload, message} from 'antd'
-import {UploadOutlined, EditOutlined} from '@ant-design/icons';
-import InputBox from "./small_comp/InputBox"
+import Down_svg from "../assets/images/svg/download.svg"
+import {RedoOutlined} from '@ant-design/icons';
+import MyUpload from "./small_comp/MyUpload"
 import Select from "./small_comp/select"
 import AddLink from "./small_comp/AddLink"
 
-
-class AllFiles extends React.Component {
+class FileList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            UID: '',
+            type: '',
             Edit_svg: true,
             list: [],
             news_num: 1,
             pageSize: 10,
-            total: 30,
+            total: 0,
             pageNumber: parseInt(window.location.hash.slice(1), 0) || 1,//获取当前页面的hash值，转换为number类型
-            selected: []
+            selected: [],
+            files: []
         }
     }
-
-    componentDidMount() {
-        this.callAPI();
-    }
-
     callAPI = () => {
-        axios.get('https://qc8vvg.fn.thelarkcloud.com/newest_', {params: {pageNum: 0, news_num: 15}})
+        let UID = this.state.UID;
+        console.log(this.state.type);
+        let State = ['all', 'pic', 'vid', 'mus', 'doc', 'like', 'recycle', 'share'].indexOf(this.state.type);
+        var api;
+        if (State < 5) api = 'http://localhost:9000/get_user_file';
+        else if (State === 5) api = 'http://localhost:9000/get_liked_file';
+        else if (State === 6) api = 'http://localhost:9000/get_deleted_file';
+        else if (State === 7) api = 'http://localhost:9000/get_shared_file';
+        axios.get('http://localhost:9000/get_numof_file', {params: {UID: UID, State: State}})
             .then((res) => {
-                var temp = [];
-                for (var i = 0; i < res.data.newslist.length; i++) {
-                    res.data.newslist[i].createdAt = this.decodeTimeStamp(new Date(res.data.newslist[i].createdAt).getTime());
-                    if (res.data.newslist[i].title.split('.').length > 1) {
-                        if (res.data.newslist[i].title.split('.')[1] === 'jpg') {
-                            temp.push(res.data.newslist[i]);
-                        }
-                    }
-                    if (res.data.newslist[i].title.length > 37) res.data.newslist[i].title = res.data.newslist[i].title.substring(0, 36) + '...'
+                this.setState({total: res.data[0]['COUNT(*)']})
+            })
+            .catch((err) => console.log(err));
+        axios.get(api, {
+            params: {
+                UID: UID,
+                Del: 0,
+                State: State,
+                PageNum: this.state.pageNumber,
+                PageSize: this.state.pageSize
+            }
+        })
+            .then((res) => {
+                console.log(res.data);
+                for (var i = 0; i < res.data.length; i++) {
+                    res.data[i].Mtime = this.decodeTimeStamp(new Date(res.data[i].Mtime).getTime());
                 }
-                console.log(temp);
                 this.setState({
-                    list: temp
+                    list: res.data
                 })
             })
             .catch((err) => {
                 console.log(err)
             })
     };
+
+    componentWillReceiveProps() {
+        setTimeout(() => {
+            this.setState({
+                pageNumber: 1,
+                UID: this.props.match.params.UID,
+                type: this.props.match.params.type
+            });
+            this.callAPI();
+        })
+    }
     PageChange = (page) => {
-        this.setState({
-            pageNumber: page
+        setTimeout(() => {
+            this.setState({pageNumber: page});
+            this.callAPI();
         })
     };
     AddLink = () => {
         document.getElementById("add_link").style.display = "block";
-    }
+    };
+    Download = (UUID) => {
+        axios.get('http://localhost:9000/download', {params: {UUID: UUID}})
+            .then((res) => {
+                var aLink = document.createElement('a');
+                aLink.download = res.data[0].File_Name;
+                aLink.href = 'D:/web/HelloExpress/public/uploads/1618978812812-island1.jpg';
+                document.body.appendChild(aLink);
+                aLink.click();
+                document.body.removeChild(aLink);
+            })
+    };
 
     render() {
         var data = this.state.list;
@@ -80,10 +114,8 @@ class AllFiles extends React.Component {
                         subTitle=""
                         extra={[
                             <Button key="1" onClick={this.AddLink}>添加链接</Button>,
-                            <Button key="2" type="">切换视图</Button>,
-                            <Upload {...props}>
-                                <Button key={"3"} icon={<UploadOutlined/>}>上传文件</Button>
-                            </Upload>,
+                            <Button key="2" icon={<RedoOutlined/>}>刷新</Button>,
+                            <MyUpload UID={this.state.UID}/>,
                         ]}
                     >
                         <Descriptions size="small" column={3}>
@@ -112,23 +144,25 @@ class AllFiles extends React.Component {
                                         document.getElementById("edit_title" + index).value = document.getElementById("title" + index).innerHTML;
                                         document.getElementById("title" + index).style.display = "none";
                                     }}
-                                    > 编辑 </a>,
+                                    > 编辑 </a>, <a onClick={this.Download.bind(this, item.UUID)}>下载</a>
                                 ]}>
                                     <List.Item.Meta
-                                        avatar={<Avatar shape={"square"} src={this.findFilePic(item.title)}/>}
+                                        avatar={<Avatar shape={"square"} src={this.findFilePic(item.State)}/>}
                                         title={<span className={"list_title_box"}>
                                         <Select addSelect={(idx) => {
                                             this.add_select(idx)
                                         }} index={index} onRef={(child) => {
                                             this.child = child
                                         }}/>
-                                            <a href="https://ant.design" id={"title" + index}>{item.title}</a>
-                                            <Edit_title filename={item.title} index={index} data={data} update={() => {
+                                            <a href={"http://localhost:9000" + item.Path} target={'_blank'}
+                                               id={"title" + index}>{item.File_Name}</a>
+                                            <Edit_title filename={item.File_Name} index={index} data={data}
+                                                        update={() => {
                                                 this.editname()
                                             }}/>
-                                        <small id={'list_time'}>{item.createdAt}</small>
-                                        <small id={"file_space_value"}>{item.like}KB</small>
-                                        <LikeBtn/>
+                                        <small id={'list_time'}>{this.getFileSize(item.Size)}</small>
+                                        <small id={"file_space_value"}>{item.Mtime}</small>
+                                        <LikeBtn filestate={item}/>
                                     </span>}
                                         // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
                                     />
@@ -139,6 +173,7 @@ class AllFiles extends React.Component {
                 }
                 <img id={"edit_img"} src={this.state.Edit_svg === true ? Edit_svg : Del_svg}
                      onClick={this.del_or_edit.bind(this, data)}/>
+                <img id={"down_img"} src={Down_svg}/>
                 <div className={"pagination"}><Pagination showToal={2}
                     // defaultPageSize={3}
                                                           showQuickJumper
@@ -161,12 +196,13 @@ class AllFiles extends React.Component {
         var b = !this.state.Edit_svg;
         this.setState({
             Edit_svg: b
-        })
+        });
         var htmlCollection = document.getElementsByClassName("select_svg");
         if (b === false) {// 点击了编辑
             for (let i = 0; i < htmlCollection.length; i++) {
                 htmlCollection[i].style.display = "inline";
             }
+            document.getElementById("down_img").style.display = "block";
         } else {
             for (let i = 0; i < htmlCollection.length; i++) {
                 htmlCollection[i].style.display = "none";
@@ -180,7 +216,7 @@ class AllFiles extends React.Component {
                 data.splice(selecteddata[i] - i, 1)
             }
             this.state.selected = [];
-            // this.child.componentWillReceiveProps();
+            document.getElementById("down_img").style.display = "none";
         }
     };
     editname = () => {
@@ -195,26 +231,20 @@ class AllFiles extends React.Component {
         }
     };
 
-    findFilePic = (title) => {
-        var End = title.split(".");
-        var end = End[End.length - 1]
-        // console.log(End)
-        // if(end===undefined) return <img src={Doc}/>
-        switch (end) {
-            case 'mp4':
+    findFilePic = (State) => {
+        switch (State) {
+            case 2:
                 return Mp4
-            case 'mp3':
+            case 3:
                 return Mp3
-            case 'jpg':
+            case 1:
                 return Jpg
-            case 'png':
-                return Jpg
-            case 'doc':
+            case 4:
                 return Doc
             default:
                 return Doc
         }
-    }
+    };
 
     decodeTimeStamp = (timestamp) => {
         var arrTimestamp = (timestamp + '').split('');
@@ -273,44 +303,19 @@ class AllFiles extends React.Component {
         }
         return '刚刚';
     }
-    loadmore = () => {
-        this.state.news_num = 3 + this.state.news_num
-        axios.get('https://qc8vvg.fn.thelarkcloud.com/newest_', {params: {pageNum: 0, news_num: this.state.news_num}})
-            .then((res) => {
-                for (var i = 0; i < res.data.newslist.length; i++) {
-                    res.data.newslist[i].createdAt = this.decodeTimeStamp(new Date(res.data.newslist[i].createdAt).getTime())
-                    if (res.data.newslist[i].comment_id == undefined) res.data.newslist[i].comment_id = 0
-                    else res.data.newslist[i].comment_id = eval('([' + res.data.newslist[i].comment_id + '])').length
-                    if (res.data.newslist[i].title.length > 37) res.data.newslist[i].title = res.data.newslist[i].title.substring(0, 36) + '...'
-                }
-                // console.log(res)
-                this.setState({
-                    list: res.data.newslist
-                })
-
-            })
-            .catch((err) => {
-                alert("没有更多")
-            })
+    getFileSize = (fileByte) => {
+        var fileSizeByte = fileByte;
+        var fileSizeMsg = "";
+        if (fileSizeByte < 1048576) fileSizeMsg = (fileSizeByte / 1024).toFixed(0) + "KB";
+        else if (fileSizeByte == 1048576) fileSizeMsg = "1MB";
+        else if (fileSizeByte > 1048576 && fileSizeByte < 1073741824) fileSizeMsg = (fileSizeByte / (1024 * 1024)).toFixed(0) + "MB";
+        else if (fileSizeByte > 1048576 && fileSizeByte == 1073741824) fileSizeMsg = "1GB";
+        else if (fileSizeByte > 1073741824 && fileSizeByte < 1099511627776) fileSizeMsg = (fileSizeByte / (1024 * 1024 * 1024)).toFixed(0) + "GB";
+        else fileSizeMsg = "文件超过1TB";
+        return fileSizeMsg;
     }
+
+
 }
 
-const props = {
-    name: 'file',
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-        authorization: 'authorization-text',
-    },
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-};
-
-export default AllFiles;
+export default FileList;

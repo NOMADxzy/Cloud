@@ -1,13 +1,8 @@
 import './assets/css/index.css';
-import Axios from 'axios';
 import React from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 
-import Files from './components/AllFiles'
-import Pic from './components/pic'
-import Vid from './components/vid'
-import Mus from './components/mus'
-import Docu from './components/doc'
+import Files from './components/FileList'
 import Useage from './components/useage'
 
 import Head from './components/head'
@@ -16,7 +11,6 @@ import InputBox from './components/small_comp/InputBox'
 
 import Tab from './components/leftTab'
 
-// import LoginPage from './components/loginPage/loginPage'
 
 
 class App extends React.Component {
@@ -24,6 +18,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             inputValue: '',
+            user: '1'
         }
     }
 
@@ -37,6 +32,7 @@ class App extends React.Component {
         this.searchMsgK();
     };
     setUser = (name) => {
+        this.setState({user: name});
         this.head.setName(name);
     };
 
@@ -51,15 +47,13 @@ class App extends React.Component {
                     <InputBox set_user={(name) => {
                         this.setUser(name)
                     }}/>
-                    <Tab/>
+                    <Tab appstate={this.state}/>
                     <article className={'left'}>
                         <Route exact path="/" component={Files}/>
+                        <Route exact path="/:UID" component={Files}/>
+                        <Route path="/:UID/useage" component={Useage}/>
+                        <Route exact path="/:UID/:type" component={Files}/>
                         <Route path="/DICM" component={DICM}/>
-                        <Route path="/pic" component={Pic}/>
-                        <Route path="/vid" component={Vid}/>
-                        <Route path="/mus" component={Mus}/>
-                        <Route path="/doc" component={Docu}/>
-                        <Route path="/useage" component={Useage}/>
 
                     </article>
                     {/*<Me/>*/}

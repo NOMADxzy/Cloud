@@ -20,11 +20,11 @@ class Edit_title extends React.Component {
     };
     Submit = (e) => {
         console.log("修改为" + e.target.value);
-        this.props.data[this.props.index].title = e.target.value;
+        this.props.data[this.props.index].File_Name = e.target.value;
         this.props.update();
         e.target.style.display = "none";
         document.getElementById("title" + this.props.index).style.display = "inline";
-    }
+    };
 
     render() {
         return (
