@@ -54,9 +54,9 @@ class LeftTab extends React.Component {
                     <li><Link style={{color: this.state.cur_item === 7 ? "red" : "#357ebd"}} onClick={() => {
                         this.setState({cur_item: 7})
                     }} to={"/" + this.state.username + "/share"}>我的分享</Link></li>
-                    <li><Link style={{color: this.state.cur_item === 8 ? "red" : "#357ebd"}} onClick={() => {
-                        this.setState({cur_item: 8})
-                    }} to={"/" + this.state.username + "/useage"}>空间详情</Link></li>
+                    {/*<li><Link style={{color: this.state.cur_item === 8 ? "red" : "#357ebd"}} onClick={() => {*/}
+                    {/*this.setState({cur_item: 8})*/}
+                    {/*}} to={"/" + this.state.username + "/useage"}>空间详情</Link></li>*/}
                 </ul>
             </div>
         )

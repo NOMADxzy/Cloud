@@ -17,6 +17,7 @@ import {RedoOutlined} from '@ant-design/icons';
 import MyUpload from "./small_comp/MyUpload"
 import Select from "./small_comp/select"
 import AddLink from "./small_comp/AddLink"
+import SearchWrap from './small_comp/SearchWrap'
 
 class FileList extends React.Component {
     constructor(props) {
@@ -35,26 +36,36 @@ class FileList extends React.Component {
         }
     }
     callAPI = () => {
-        let UID = this.state.UID;
-        console.log(this.state.type);
         let State = ['all', 'pic', 'vid', 'mus', 'doc', 'like', 'recycle', 'share'].indexOf(this.state.type);
-        var api;
-        if (State < 5) api = 'http://localhost:9000/get_user_file';
-        else if (State === 5) api = 'http://localhost:9000/get_liked_file';
-        else if (State === 6) api = 'http://localhost:9000/get_deleted_file';
-        else if (State === 7) api = 'http://localhost:9000/get_shared_file';
-        axios.get('http://localhost:9000/get_numof_file', {params: {UID: UID, State: State}})
+        let UID = this.state.UID;
+        let Collect = State === 5 ? 1 : 0;
+        let Del = State === 6 ? 1 : 0;
+        let Share = State === 7 ? 1 : 0;
+        let keyword = this.props.location.search.substr(9);
+
+        axios.get('http://localhost:9000/get_numof_file', {
+            params: {
+                UID: UID,
+                State: State,
+                Del: Del,
+                Collect: Collect,
+                keyword: keyword
+            }
+        })
             .then((res) => {
                 this.setState({total: res.data[0]['COUNT(*)']})
             })
             .catch((err) => console.log(err));
-        axios.get(api, {
+        axios.get('http://localhost:9000/get_user_file', {
             params: {
                 UID: UID,
-                Del: 0,
+                Del: Del,
                 State: State,
+                Collect: Collect,
+                Share: Share,
                 PageNum: this.state.pageNumber,
-                PageSize: this.state.pageSize
+                PageSize: this.state.pageSize,
+                keyword: keyword
             }
         })
             .then((res) => {
@@ -83,6 +94,7 @@ class FileList extends React.Component {
     }
 
     componentWillReceiveProps() {
+        // console.log(this.props.location.search.substr(9));
         setTimeout(() => {
             this.setState({
                 pageNumber: 1,
@@ -117,6 +129,7 @@ class FileList extends React.Component {
         var data = this.state.list;
         return (
             <div className={"file_list_content"}>
+
                 <div className={"list_box_top"}>
                     <PageHeader
                         ghost={false}
@@ -226,11 +239,12 @@ class FileList extends React.Component {
                 let idx = selecteddata[i];
                 axios.post('http://localhost:9000/delete_file', {UID: this.state.UID, UUID: data[idx].UUID})
                     .then((res) => {
-                        if (res.status === 200) message.success("删除了" + selecteddata.length + "个文件");
+                        if (res.status === 200) ;
                         else message.error("删除失败");
                     }).catch(() => message.error("删除失败"));
                 data.splice(idx, 1)
             }
+            message.success("删除了" + selecteddata.length + "个文件")
             this.state.selected = [];
             document.getElementById("down_img").style.display = "none";
         }

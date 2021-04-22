@@ -8,7 +8,7 @@ import Useage from './components/useage'
 import Head from './components/head'
 import DICM from './components/DICM'
 import InputBox from './components/small_comp/InputBox'
-
+import More from './components/More'
 import Tab from './components/leftTab'
 
 
@@ -51,6 +51,7 @@ class App extends React.Component {
                     <article className={'left'}>
                         <Route exact path="/" component={Files}/>
                         <Route path="/DICM" component={DICM}/>
+                        <Route path="/More" component={More}/>
                         {/*<Route exact path="/:UID" component={Files}/>*/}
                         <Route exact path="/:UID/:type" component={Files}/>
                         <Route path="/:UID/useage" component={Useage}/>

@@ -5,6 +5,7 @@ import Fetchjsonp from 'fetch-jsonp';
 import Axios from 'axios'
 import Man_svg from "../assets/images/svg/man.svg"
 import {Link} from "react-router-dom";
+import SearchWrap from './small_comp/SearchWrap'
 
 class Head extends React.Component {
     constructor(props) {
@@ -31,7 +32,10 @@ class Head extends React.Component {
 
     getName = () => {
         return this.state.name;
-    }
+    };
+    searchFile = () => {
+
+    };
 
     render() {
         return (
@@ -43,7 +47,7 @@ class Head extends React.Component {
                 </span>
                 <Link to={"/" + this.state.name + "/all"}><b>云盘</b></Link>
                 <Link to="/DICM"><b>相册</b></Link>
-                <Link to="/More"><b>更多</b></Link>
+                <Link to="/More"><b>空间详情</b></Link>
                 <span className={"dropdown"}>
                     <img id="man_svg" src={Man_svg}/>
                     <strong className="username" id={"username"}>{this.state.name}</strong>
@@ -56,12 +60,7 @@ class Head extends React.Component {
                         <a>帮助中心</a>
                     </div>
                 </span>
-                <span className="search-wrapper">
-                    <input ref={(input) => this.inputValue = input} onKeyUp={this.searchMsgK}
-                           placeholder="搜索我的文件"/>
-                    <button type="button" onChange={this.searchMsgB}>搜索</button>
-
-                </span>
+                <SearchWrap/>
             </div>
         )
     }

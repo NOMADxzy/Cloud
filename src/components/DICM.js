@@ -38,9 +38,25 @@ class DICM extends React.Component {
         })
     }
 
+    componentWillReceiveProps() {
+        setTimeout(() => {
+            this.setState({UID: document.getElementById('username').innerText})
+            this.getDatatest();
+        })
+    }
+
     getDatatest = () => {
         let UID = this.state.UID;
-        axios.get('http://localhost:9000/get_numof_file', {params: {UID: UID, State: 1}})
+        let keyword = this.props.location.search.substr(9);
+        axios.get('http://localhost:9000/get_numof_file', {
+            params: {
+                UID: UID,
+                State: 1,
+                Del: 0,
+                Collect: 0,
+                keyword: keyword
+            }
+        })
             .then((res) => {
                 this.setState({total: res.data[0]['COUNT(*)']})
             })
@@ -49,13 +65,14 @@ class DICM extends React.Component {
             params: {
                 UID: UID,
                 Del: 0,
+                Collect: 0,
                 PageSize: this.state.pageSize,
                 PageNum: this.state.PageNum,
-                State: 1
+                State: 1,
+                keyword: keyword
             }
         })
             .then((res) => {
-                console.log(res);
                 this.setState({
                     list: res.data
                 })
