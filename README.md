@@ -1,70 +1,32 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## “Cloud”云盘项目介绍
 
-## Available Scripts
+# 一、项目简介
 
-In the project directory, you can run:
+随着公共信息下载的便捷性提升和互联网网站愈加发达等趋势，公共资源的共享需求平缓下降，而个人数据和信息的存储和设备转移方面的需求越来越收到用户的重视，“Cloud”个人网盘项目旨在提供一个解决用户个人数据存储和交换的方案，告别代办的移动存储设备转移和单纯的网站数据下载行为。
+“Cloud”个人网盘是基于云计算、为用户提供数据储存、访问、管理和分享功能的在线储存服务应用；与U盘、移动硬盘等传统储存方式相比，具有储存空间大、数据信息自动备份、多端同步、储存安全和功能多样的优势。
 
-### `npm start`
+# 二、技术手段
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+本项目按照模块化设计、敏捷开发思想，采用迭代、循序渐进的方法进行软件开发。在敏捷开发中，软件项目在构建初期被切分为多个子项目，各个子项目同时进行，成果都经过测试后组合在一起。具体拆分成如下几个模块：
+基于Node.js使用express框架进行后端开发，用于接收和响应前端发送过来的各类请求；
+设计和创建数据库以及相关所需查询语句，采用Mysql作为数据库进行存储；
+React框架开发前端UI界面，实现基本的逻辑操作，设计层叠样式表和应用antd组件库，为用户提供精美的交互界面；
+所有模块完成后将其部署在服务器上，开启相应端口，进行最终测试。为用户提供便捷、高效的云端存储服务。
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# 三、功能应用
 
-### `npm test`
+支持注册和登录账号，用户独立拥有一定的存储空间，最大程度的保护用户的隐私和数据的安全，同时允许不同用户共享云盘空间和内容，从而节约成本。
+用户可以随时随地的登录个人账号，上传、下载和管理文件，支持照片，视频，音乐等多种文件格式，可以帮用户存储想要永久留下的记忆。
+“Cloud”云盘支持在线修改文件的名称，按名称、日期等方式查询所需要的文件，从而更高效的管理文件。
+胜过传统的存储设备，在存储大量的文件的同时又能做到不用占用本地的空间，只需记住一个账号即可将文件随身携带。
+用户之间可以互相传送和共享图片，视频等文件，与好友分享美好时光，只需输入链接和提取码，即可一键保存资源。
+本云盘提供存储数据分析，上传和更换头像等人性化功能，旨在为用户提供更舒适的体验。
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# 四、小组介绍
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+组长：徐祖云<br>
+组员：<br>
+张帆18030100187<br>
+吕叶凡18030100148<br>
+李智18030100098<br>
