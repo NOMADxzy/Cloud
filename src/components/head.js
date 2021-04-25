@@ -6,14 +6,17 @@ import Axios from 'axios'
 import Man_svg from "../assets/images/svg/man.svg"
 import {Link} from "react-router-dom";
 import SearchWrap from './small_comp/SearchWrap'
+import ChangePwd from './small_comp/ChangePwd'
+import axios from 'axios'
+import ChangeAvatar from "./small_comp/ChangeAvatar";
 
 class Head extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            head_img: '',
+            head_img: '/public/avatar/default.jpeg',
             name: '未登录'
-        }
+        };
         props.onRef(this);
     }
 
@@ -26,15 +29,16 @@ class Head extends React.Component {
     setName(name) {
         this.setState({
             name: name,
-            head_img: "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3065335715,4197701299&fm=26&gp=0.jpg"
-        })
+        });
+        axios.get('http://localhost:9000/get_avatar', {params: {UID: name}})
+            .then((res) => {
+                this.setState({head_img: res.data});
+                this.chg_avt.changesrc(res.data);
+            })
     }
 
     getName = () => {
         return this.state.name;
-    };
-    searchFile = () => {
-
     };
 
     render() {
@@ -43,7 +47,7 @@ class Head extends React.Component {
                 <span className={"artfont"}>
                     <img src={Logo}
                          height={50}/>
-                <strong>CLoud云盘</strong>
+                <strong>FileHub</strong>
                 </span>
                 <Link to={"/" + this.state.name + "/all"}><b>云盘</b></Link>
                 <Link to="/DICM"><b>相册</b></Link>
@@ -51,11 +55,14 @@ class Head extends React.Component {
                 <span className={"dropdown"}>
                     <img id="man_svg" src={Man_svg}/>
                     <strong className="username" id={"username"}>{this.state.name}</strong>
-                    <img className={"circle_img"} src={this.state.head_img}/>
+                    <img id={"circle_img"} src={'http://localhost:9000' + this.state.head_img}/>
+                    <ChangeAvatar headstate={this.state} onRef={(c) => this.chg_avt = c}/>
                     <div className={"dropdown_content"}>
-                        <a>更改头像</a>
                         <a onClick={() => {
-                            document.getElementById("input_box").style.display = "block"
+                            document.getElementById("change_avt").style.display = "block"
+                        }}>更改头像</a>
+                        <a onClick={() => {
+                            document.getElementById("change_pwd").style.display = "block"
                         }}>修改密码</a>
                         <a>帮助中心</a>
                     </div>

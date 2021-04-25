@@ -1,5 +1,13 @@
 import React from 'react';
-import {Form, Input, Button, Checkbox, message} from 'antd';
+import '../../assets/css/addlink.css'
+import {Form, Input, Button, Checkbox, message, Card} from 'antd';
+import axios from 'axios';
+import Jpg from "../../assets/images/FileType/jpg.jpg"
+import Mp4 from "../../assets/images/FileType/mp4.jpg"
+import Mp3 from "../../assets/images/FileType/mp3.png"
+import Doc from "../../assets/images/FileType/doc.jpg"
+
+const {Meta} = Card;
 
 const layout = {
     labelCol: {span: 8},
@@ -13,12 +21,44 @@ const tailLayout = {
 class AddLink extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            from: '',
+            UUID: '',
+            view: 'add',
+            sharedate: '2021-04-24T12:45:44.000Z',
+            savetimes: 0,
+            avatar: Mp4,
+            File_Name: '机械战警.mp4',
+            Size: 0
+        }
     }
 
     onFinish = (values: any) => {
-        console.log('Success:', values);
-        document.getElementById("add_link").style.display = "none";
-        message.success("添加成功");
+        // document.getElementById("add_link").style.display = "none";
+        axios.get('http://localhost:9000/get_sharefile_by_link', {params: {Link: values.link, Code: values.code}})
+            .then((res) => {
+                if (res.status === 208) message.warn("链接不存在");
+                else {
+                    console.log(res);
+                    this.setState({
+                        view: 'file',
+                    });
+                    document.getElementById('add_link').style.padding = '0px';
+                    this.setState({
+                        from: res.data.from,
+                        Path: res.data.file.Path,
+                        UUID: res.data.file.UUID,
+                        sharedate: res.data.sharedate,
+                        savetimes: res.data.savetimes,
+                        avatar: this.props.findFilePic(res.data.file.State),
+                        File_Name: res.data.file.File_Name,
+                        Size: res.data.file.Size
+                    })
+                }
+            })
+            .catch((err) => {
+                if (err.status === 403) message.error('提取码错误');
+            });
     };
 
     onFinishFailed = (errorInfo: any) => {
@@ -26,11 +66,60 @@ class AddLink extends React.Component {
         message.error("提取码错误");
     };
     cancel = () => {
+        this.setState({view: 'add'});
         document.getElementById("add_link").style.display = "none";
-    }
+        document.getElementById('add_link').style.padding = '4%';
+    };
+    callAddLink = () => {
+        let UID = document.getElementById('username').innerText;
+        let UUID = this.state.UUID;
+        axios.post('http://localhost:9000/add_link_file', {
+            UID: UID,
+            UUID: UUID,
+            Path: this.state.Path,
+            from: this.state.from
+        })
+            .then((res) => {
+                if (res.status === 200) {
+                    document.getElementById("add_link").style.display = 'none';
+                    message.success("添加成功");
+                } else {
+                    message.warn(res.status + "您已添加过此文件");
+                }
+            })
+            .catch((err) => {
+                message.warn("您已添加过此文件");
+            });
+
+    };
 
     render() {
-        return (
+        if (this.state.view === 'file') return (
+            <div id={'add_link'}>
+                {/*<div className={'link_title'}>*/}
+                {/*<img src={this.state.avatar} style={{width:20}}/>*/}
+                {/*<strong>{this.state.File_Name}</strong>*/}
+                {/*</div>*/}
+                <Card
+                    hoverable
+                    style={{width: 350}}
+                    cover={<div className={'title'}>
+                        <img alt="example" src={this.state.avatar}/>
+                        <strong>{this.state.File_Name}</strong>
+                    </div>}>
+                    <div>
+                        <span className={"detail"}><i>来源：</i>{this.state.from}<br/></span>
+                        <span className={"detail"}><i>大小：</i>{this.props.getFileSize(this.state.Size)}<br/></span>
+                        <span className={"detail"}><i>时间：</i>{new Date(this.state.sharedate).toLocaleDateString()}<br/></span>
+                        <span className={"detail"}><i>保存次数：</i>{this.state.savetimes}<br/></span>
+                    </div>
+                    <div className={'opt_buts'}>
+                        <Button onClick={this.callAddLink}>添加</Button>
+                        <Button onClick={this.cancel}>取消</Button>
+                    </div>
+                </Card>
+            </div>);
+        else return (
             <div id={"add_link"}>
                 <Form
                     {...layout}
@@ -44,7 +133,7 @@ class AddLink extends React.Component {
                         name="link"
                         rules={[{required: true, message: '请输入链接!'}]}
                     >
-                        <Input/>
+                        <Input id={"link_input"} style={{width: 200}}/>
                     </Form.Item>
 
                     <Form.Item
@@ -52,7 +141,7 @@ class AddLink extends React.Component {
                         name="code"
                         rules={[{required: true, message: '提取码不能为空!'}]}
                     >
-                        <Input/>
+                        <dic id={'link_code'}><Input style={{width: 100}}/></dic>
                     </Form.Item>
 
                     <Form.Item {...tailLayout}>

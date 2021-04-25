@@ -1,0 +1,41 @@
+/*添加链接框样式*/
+
+#add_link {
+    padding: 4%;
+    display: none;
+    position: fixed;
+    background-color: #cccccc;
+    margin-left: 20%;
+    z-index: 3;
+    box-shadow: 5px 8px 5px 5px #cccccc;
+}
+
+#link_code {
+    display: flex;
+    /*justify-content: center;*/
+}
+
+.title {
+    /*border: #cccccc solid 1px;*/
+    /*background-color: #e8e8e8;*/
+}
+
+.title strong {
+    margin-left: 5%;
+    font-size: larger;
+}
+
+.title img {
+    width: 15%;
+    height: 15%;
+}
+
+.opt_buts {
+    display: flex;
+    justify-content: center;
+}
+
+.detail {
+    display: flex;
+    justify-content: center;
+}

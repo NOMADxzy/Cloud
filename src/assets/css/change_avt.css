@@ -1,0 +1,72 @@
+/*改变头像框样式*/
+#change_avt {
+    display: none;
+    position: fixed;
+    background-color: #C5D3D3;
+    padding: 4% 4%;
+    margin-left: 35%;
+    margin-top: 8%;
+    z-index: 3;
+    box-shadow: 5px 8px 5px 5px #cccccc;
+}
+
+#change_avt i {
+    position: relative;
+    top: -10px;
+    left: -10px;
+}
+
+#change_avt small {
+    position: relative;
+    top: -10px;
+    cursor: pointer;
+    border: #444444 solid 1px;
+    margin-left: 10px;
+}
+
+#change_avt small:hover {
+    color: #357ebd;
+}
+
+.hot_img {
+    padding: 4px;
+    cursor: pointer;
+}
+
+.hot_img :hover {
+    border: #357ebd solid 1px;
+}
+
+#avatar {
+    width: 120px;
+    margin-left: 30%;
+    border-radius: 50%;
+}
+
+#avatar:hover {
+    filter: brightness(50%);
+}
+
+#avatar:hover #upload_svg {
+    display: inline;
+}
+
+.opt_buts {
+    display: flex;
+    justify-content: center;
+}
+
+#upload_svg {
+    position: absolute;
+    z-index: 2;
+    width: 80px;
+    left: 15%;
+    top: 15%;
+    display: none;
+    cursor: pointer;
+}
+
+/*隐藏的Avt_Upload组件样式*/
+#avt_upload {
+    display: none;
+}

@@ -10,6 +10,8 @@ import DICM from './components/DICM'
 import InputBox from './components/small_comp/InputBox'
 import More from './components/More'
 import Tab from './components/leftTab'
+import ChangePwd from "./components/small_comp/ChangePwd";
+import ChangeAvatar from "./components/small_comp/ChangeAvatar";
 
 
 
@@ -18,7 +20,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             inputValue: '',
-            user: '1'
+            user: '未登录'
         }
     }
 
@@ -47,6 +49,7 @@ class App extends React.Component {
                     <InputBox set_user={(name) => {
                         this.setUser(name)
                     }}/>
+                    <ChangePwd UID={this.state.user}/>
                     <Tab appstate={this.state}/>
                     <article className={'left'}>
                         <Route exact path="/" component={Files}/>

@@ -113,15 +113,14 @@ class FileList extends React.Component {
     AddLink = () => {
         document.getElementById("add_link").style.display = "block";
     };
-    Download = (UUID) => {
-        axios.get('http://localhost:9000/download', {params: {UUID: UUID}})
+    ShareFile = (item) => {
+        axios.post('http://localhost:9000/make_a_share_file', {
+            UUID: item.UUID,
+            UID: this.state.UID,
+            Create_date: item.Mtime
+        })
             .then((res) => {
-                var aLink = document.createElement('a');
-                aLink.download = res.data[0].File_Name;
-                aLink.href = 'D:/web/HelloExpress/public/uploads/1618978812812-island1.jpg';
-                document.body.appendChild(aLink);
-                aLink.click();
-                document.body.removeChild(aLink);
+                console.log(res);
             })
     };
 
@@ -152,7 +151,7 @@ class FileList extends React.Component {
                             </Descriptions.Item>
                         </Descriptions>
                     </PageHeader>
-                    <AddLink/>
+                    <AddLink findFilePic={this.findFilePic} getFileSize={this.getFileSize}/>
                 </div>
                 {
                     <List
@@ -168,7 +167,7 @@ class FileList extends React.Component {
                                         document.getElementById("edit_title" + index).value = document.getElementById("title" + index).innerHTML;
                                         document.getElementById("title" + index).style.display = "none";
                                     }}
-                                    > 编辑 </a>, <a onClick={this.Download.bind(this, item.UUID)}>下载</a>
+                                    > 编辑 </a>, <a onClick={this.ShareFile.bind(this, item)}>分享</a>
                                 ]}>
                                     <List.Item.Meta
                                         avatar={<Avatar shape={"square"} src={this.findFilePic(item.State)}/>}
