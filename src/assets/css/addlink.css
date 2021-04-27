@@ -39,3 +39,15 @@
     display: flex;
     justify-content: center;
 }
+
+#link_title {
+    position: absolute;
+    left: 40%;
+    margin-top: -2.5%;
+    /*top:10%;*/
+    width: 20%;
+}
+
+#link_title small {
+    margin-left: 20%;
+}

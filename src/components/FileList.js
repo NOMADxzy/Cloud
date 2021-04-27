@@ -18,6 +18,8 @@ import MyUpload from "./small_comp/MyUpload"
 import Select from "./small_comp/select"
 import AddLink from "./small_comp/AddLink"
 import SearchWrap from './small_comp/SearchWrap'
+import LinkNotify from './small_comp/LinkNotify'
+import LinkTitle from './small_comp/LinkTitle'
 
 class FileList extends React.Component {
     constructor(props) {
@@ -49,7 +51,8 @@ class FileList extends React.Component {
                 State: State,
                 Del: Del,
                 Collect: Collect,
-                keyword: keyword
+                keyword: keyword,
+                Share: Share
             }
         })
             .then((res) => {
@@ -71,7 +74,8 @@ class FileList extends React.Component {
             .then((res) => {
                 console.log(res.data);
                 for (var i = 0; i < res.data.length; i++) {
-                    res.data[i].Mtime = this.decodeTimeStamp(new Date(res.data[i].Mtime).getTime());
+                    // res.data[i].Mtime = this.decodeTimeStamp(new Date(res.data[i].Mtime).getTime());
+                    res.data[i].Mtime = new Date(res.data[i].Mtime).toLocaleDateString();
                 }
                 this.setState({
                     list: res.data
@@ -112,16 +116,6 @@ class FileList extends React.Component {
     };
     AddLink = () => {
         document.getElementById("add_link").style.display = "block";
-    };
-    ShareFile = (item) => {
-        axios.post('http://localhost:9000/make_a_share_file', {
-            UUID: item.UUID,
-            UID: this.state.UID,
-            Create_date: item.Mtime
-        })
-            .then((res) => {
-                console.log(res);
-            })
     };
 
     render() {
@@ -167,7 +161,8 @@ class FileList extends React.Component {
                                         document.getElementById("edit_title" + index).value = document.getElementById("title" + index).innerHTML;
                                         document.getElementById("title" + index).style.display = "none";
                                     }}
-                                    > 编辑 </a>, <a onClick={this.ShareFile.bind(this, item)}>分享</a>
+                                    > 编辑 </a>,
+                                    <LinkNotify item={item} UID={this.state.UID}/>
                                 ]}>
                                     <List.Item.Meta
                                         avatar={<Avatar shape={"square"} src={this.findFilePic(item.State)}/>}
@@ -184,10 +179,10 @@ class FileList extends React.Component {
                                                 this.editname()
                                             }}/>
                                         <small id={'list_time'}>{this.getFileSize(item.Size)}</small>
-                                        <small id={"file_space_value"}>{item.Mtime}</small>
-                                        <LikeBtn filestate={item}/>
+                                            <small id={"file_space_value"}>{item.Mtime}</small>
+                                            {this.state.type === 'share' ? <LinkTitle item={item}/> :
+                                                <LikeBtn filestate={item}/>}
                                     </span>}
-                                        // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
                                     />
                                 </List.Item>
                             </div>
@@ -250,7 +245,7 @@ class FileList extends React.Component {
     };
     editname = () => {
         this.forceUpdate();
-    }
+    };
     add_select = (index) => {
         let idx = this.state.selected.indexOf(index);
         if (idx === -1) {
@@ -263,13 +258,13 @@ class FileList extends React.Component {
     findFilePic = (State) => {
         switch (State) {
             case 2:
-                return Mp4
+                return Mp4;
             case 3:
-                return Mp3
+                return Mp3;
             case 1:
-                return Jpg
+                return Jpg;
             case 4:
-                return Doc
+                return Doc;
             default:
                 return Doc
         }
