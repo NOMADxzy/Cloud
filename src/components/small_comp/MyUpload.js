@@ -46,7 +46,7 @@ class MyUpload extends React.Component {
             name: 'file',
             headers: {
                 authorization: 'authorization-text',
-                UID: this.state.UID
+                UID: this.state.UID,
             },
             action: 'http://localhost:9000/upload',
             onChange: this.handleChange,

@@ -15,16 +15,16 @@ class LinkNotify extends React.Component {
         let clipBoardContent = '123';
         window.clipboardData.setData("Text", clipBoardContent);
     };
-    openNotification = (link) => {
+    openNotification = (data) => {
         const key = `open${Date.now()}`;
         const btn = (
-            <CopyToClipboard text={link} onCopy={this.onCopy}>
+            <CopyToClipboard text={'链接：' + data.link + '，提取码：' + data.code} onCopy={this.onCopy}>
                 <Button type={'primary'} onClick={() => notification.close(key)}>复制链接</Button>
             </CopyToClipboard>
         );
         notification.open({
             message: '链接已生成',
-            description: link,
+            description: data.link + '\n提取码：' + data.code,
             btn,
             key,
             // onClose: (link)=>this.copyText(link),
@@ -37,7 +37,7 @@ class LinkNotify extends React.Component {
             Create_date: this.props.item.Mtime
         })
             .then((res) => {
-                this.openNotification(res.data.link);
+                this.openNotification(res.data);
             })
     };
 

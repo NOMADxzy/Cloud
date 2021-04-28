@@ -231,7 +231,9 @@ class FileList extends React.Component {
             selecteddata.sort();
             for (let i = selecteddata.length - 1; i >= 0; i--) {
                 let idx = selecteddata[i];
-                axios.post('http://localhost:9000/delete_file', {UID: this.state.UID, UUID: data[idx].UUID})
+                let tail = data[idx].File_Name.split('.')[1];
+                console.log(tail);
+                axios.post('http://localhost:9000/delete_file', {UID: this.state.UID, UUID: data[idx].UUID, tail: tail})
                     .then((res) => {
                         if (res.status === 200) ;
                         else message.error("删除失败");
