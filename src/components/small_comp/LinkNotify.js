@@ -26,6 +26,7 @@ class LinkNotify extends React.Component {
             message: '链接已生成',
             description: data.link + '\n提取码：' + data.code,
             btn,
+
             key,
             // onClose: (link)=>this.copyText(link),
         });

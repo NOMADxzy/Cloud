@@ -18,7 +18,7 @@ class SearchWrap extends React.Component {
     searchFile = () => {
         this.searchkey.click();
         this.inputValue.value = '';
-    }
+    };
 
     render() {
         return (
