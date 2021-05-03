@@ -2,6 +2,7 @@ import {Upload, message, Button, Progress} from 'antd';
 import {UploadOutlined} from '@ant-design/icons';
 import React from "react";
 
+const HOST = 'http://8.141.72.17:9000';
 class Avatarupload extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +18,7 @@ class Avatarupload extends React.Component {
     render() {
         const props = {
             name: 'file',
-            action: 'http://localhost:9000/upload_avt',
+            action: HOST + '/upload_avt',
             headers: {
                 authorization: 'authorization-text',
             },

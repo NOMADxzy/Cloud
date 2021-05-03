@@ -12,6 +12,7 @@ import More from './components/More'
 import Tab from './components/leftTab'
 import ChangePwd from "./components/small_comp/ChangePwd";
 import ChangeAvatar from "./components/small_comp/ChangeAvatar";
+import Loading from "./components/small_comp/Loading";
 
 
 
@@ -50,6 +51,7 @@ class App extends React.Component {
                         this.setUser(name)
                     }}/>
                     <ChangePwd UID={this.state.user}/>
+                    <div id={'loading'}><Loading/></div>
                     <Tab appstate={this.state}/>
                     <article className={'left'}>
                         <Route exact path="/" component={Files}/>

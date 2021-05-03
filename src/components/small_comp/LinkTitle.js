@@ -17,7 +17,7 @@ class LinkTitle extends React.Component {
         return (
             <div id={"link_title"}>
                 <Popover content={content}>
-                    <button type="primary">显示链接</button>
+                    <Button size={'small'}>显示链接</Button>
                 </Popover>
                 <small>{this.props.item.Save_Times}次保存</small>
             </div>

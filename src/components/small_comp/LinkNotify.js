@@ -4,7 +4,7 @@ import {Progress} from 'antd'
 import axios from 'axios'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 
-
+const HOST = 'http://8.141.72.17:9000';
 class LinkNotify extends React.Component {
     constructor(props) {
         super(props);
@@ -32,7 +32,7 @@ class LinkNotify extends React.Component {
         });
     };
     ShareFile = (item) => {
-        axios.post('http://localhost:9000/make_a_share_file', {
+        axios.post(HOST + '/make_a_share_file', {
             UUID: this.props.item.UUID,
             UID: this.props.UID,
             Create_date: this.props.item.Mtime

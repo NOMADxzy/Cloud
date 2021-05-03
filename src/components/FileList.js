@@ -7,20 +7,22 @@ import Mp4 from "../assets/images/FileType/mp4.jpg"
 import Mp3 from "../assets/images/FileType/mp3.png"
 import Doc from "../assets/images/FileType/doc.jpg"
 // import ReactPullToRefresh from 'react-pull-to-refresh'
-import {List, Avatar, Pagination, PageHeader, Button, Descriptions, message} from 'antd'
+import {List, Avatar, Pagination, PageHeader, Button, Descriptions, message, Tooltip} from 'antd'
 import LikeBtn from "./small_comp/LikeBtn"
 import Edit_title from "./small_comp/Edit_title"
 import Edit_svg from "../assets/images/svg/edit.svg"
 import Del_svg from "../assets/images/svg/del.svg"
 import Down_svg from "../assets/images/svg/download.svg"
-import {RedoOutlined} from '@ant-design/icons';
+import {RedoOutlined, PlusOutlined, EditOutlined} from '@ant-design/icons';
 import MyUpload from "./small_comp/MyUpload"
 import Select from "./small_comp/select"
 import AddLink from "./small_comp/AddLink"
 import SearchWrap from './small_comp/SearchWrap'
 import LinkNotify from './small_comp/LinkNotify'
 import LinkTitle from './small_comp/LinkTitle'
+import FileSort from './small_comp/FileSort'
 
+const HOST = 'http://8.141.72.17:9000';
 class FileList extends React.Component {
     constructor(props) {
         super(props);
@@ -37,7 +39,9 @@ class FileList extends React.Component {
             files: []
         }
     }
-    callAPI = () => {
+
+    callAPI = (SortWord) => {
+        document.getElementById("loading").style.visibility = "visible";
         let State = ['all', 'pic', 'vid', 'mus', 'doc', 'like', 'recycle', 'share'].indexOf(this.state.type);
         let UID = this.state.UID;
         let Collect = State === 5 ? 1 : 0;
@@ -45,7 +49,7 @@ class FileList extends React.Component {
         let Share = State === 7 ? 1 : 0;
         let keyword = this.props.location.search.substr(9);
 
-        axios.get('http://localhost:9000/get_numof_file', {
+        axios.get(HOST + '/get_numof_file', {
             params: {
                 UID: UID,
                 State: State,
@@ -58,8 +62,8 @@ class FileList extends React.Component {
             .then((res) => {
                 this.setState({total: res.data[0]['COUNT(*)']})
             })
-            .catch((err) => console.log(err));
-        axios.get('http://localhost:9000/get_user_file', {
+            .catch((err) => console.log(err))
+        axios.get(HOST + '/get_user_file', {
             params: {
                 UID: UID,
                 Del: Del,
@@ -68,7 +72,8 @@ class FileList extends React.Component {
                 Share: Share,
                 PageNum: this.state.pageNumber,
                 PageSize: this.state.pageSize,
-                keyword: keyword
+                keyword: keyword,
+                SortWord: SortWord
             }
         })
             .then((res) => {
@@ -83,6 +88,9 @@ class FileList extends React.Component {
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                document.getElementById("loading").style.visibility = "hidden";
             })
     };
 
@@ -117,6 +125,95 @@ class FileList extends React.Component {
     AddLink = () => {
         document.getElementById("add_link").style.display = "block";
     };
+    add_select = (index) => {
+        let idx = this.state.selected.indexOf(index);
+        if (idx === -1) {
+            this.state.selected.push(index);
+            document.getElementsByName('alllist')[index].className = 'ant_list_box_selected';
+        } else {
+            this.state.selected.splice(idx, 1);
+            document.getElementsByName('alllist')[index].className = 'ant_list_box';
+        }
+
+    };
+    del_or_edit = (data) => {
+        var b = !this.state.Edit_svg;
+        this.setState({
+            Edit_svg: b
+        });
+        var htmlCollection = document.getElementsByClassName("select_svg");
+        if (b === false) {// 点击了编辑
+            for (let i = 0; i < htmlCollection.length; i++) {
+                htmlCollection[i].style.display = "inline";
+            }
+            // document.getElementById("down_img").style.display = "block";
+        }
+        if (b === true) {// 点击了删除
+            for (let i = 0; i < htmlCollection.length; i++) {
+                htmlCollection[i].style.display = "none";
+            }
+            let selecteddata = this.state.selected;
+            selecteddata.sort();
+            for (let i = selecteddata.length - 1; i >= 0; i--) {
+                let idx = selecteddata[i];
+                document.getElementsByName('alllist')[idx].className = 'ant_list_box';
+                let tail = data[idx].File_Name.split('.')[1];
+                // console.log(tail);
+                axios.post(HOST + '/delete_file', {UID: this.state.UID, UUID: data[idx].UUID, tail: tail})
+                    .then((res) => {
+                        if (!res.status === 200) message.error("删除失败");
+                    }).catch(() => message.error("删除失败"));
+                data.splice(idx, 1);
+            }
+            if (this.state.type !== 'recycle') setTimeout(message.success(selecteddata.length + "个文件已放入回收站"), 1000);
+            else setTimeout(message.success("删除了" + selecteddata.length + "个文件"), 1000);
+
+            this.state.selected = [];
+            // document.getElementById("down_img").style.display = "none";
+        }
+    };
+    cancel_del = () => {
+        this.setState({Edit_svg: true});
+        var htmlCollection = document.getElementsByClassName("select_svg");
+        let selected = JSON.parse(
+            JSON.stringify(this.state.selected)
+        );
+        for (let i = 0; i < selected.length; i++) {
+            htmlCollection[selected[i]].click();
+        }
+        for (let i = 0; i < htmlCollection.length; i++) {
+            htmlCollection[i].style.display = "none";
+        }
+    };
+    recycleFile = () => {
+        this.setState({
+            Edit_svg: true
+        });
+        var data = this.state.list;
+        let UID = this.state.UID;
+        let success_num = 0;
+        var htmlCollection = document.getElementsByClassName("select_svg");
+        let selected = JSON.parse(
+            JSON.stringify(this.state.selected)
+        );
+        for (let i = 0; i < selected.length; i++) {
+            let idx = selected[i];
+            htmlCollection[idx].click();
+            axios.post(HOST + '/recycle', {UID: UID, UUID: data[idx].UUID})
+                .then(() => {
+                    success_num++;
+                })
+                .catch(() => {
+                    message.error("恢复失败")
+                });
+            data.splice(idx, 1);
+            console.log(data)
+        }
+        // setTimeout(message.success("恢复了"+success_num+"个文件"),1000);
+        for (let i = 0; i < htmlCollection.length; i++) {
+            htmlCollection[i].style.display = "none";
+        }
+    }
 
     render() {
         var data = this.state.list;
@@ -130,18 +227,29 @@ class FileList extends React.Component {
                         title="云盘"
                         subTitle=""
                         extra={[
-                            <Button key="1" onClick={this.AddLink}>添加链接</Button>,
-                            <Button key="2" onClick={this.callAPI} icon={<RedoOutlined/>}>刷新</Button>,
+                            this.state.Edit_svg ? <Tooltip title={'刷新列表内容'}><Button key="1" onClick={this.callAPI}
+                                                                                    icon={
+                                                                                        <RedoOutlined/>}>刷新</Button></Tooltip> :
+                                <Button key="1" onClick={this.cancel_del}>取消</Button>,
+                            !this.state.Edit_svg ? <Button key="2" disabled={this.state.type !== 'recycle'}
+                                                           onClick={this.recycleFile}><span>恢复</span></Button> :
+                                <Button key="1" onClick={this.AddLink} icon={<PlusOutlined/>}>链接</Button>,
+                            <Button key="3" onClick={this.del_or_edit.bind(this, data)}>{this.state.Edit_svg ? '编辑' :
+                                <span style={{color: 'red'}}>删除</span>}</Button>,
                             <MyUpload UID={this.state.UID}/>,
                         ]}
                     >
-                        <Descriptions size="small" column={3}>
+                        <Descriptions size="small" column={4}>
                             <Descriptions.Item label="文件名"/>
                             <Descriptions.Item>
                                 <small id={"daxiao"}>大小</small>
                             </Descriptions.Item>
                             <Descriptions.Item>
-                                <small id={"shijian"}>时间</small>
+                                <small id={"shijian"}>{'时间'}</small>
+                            </Descriptions.Item>
+                            <Descriptions.Item>
+                                <span id={"sort"}><FileSort
+                                    callfilelistapi={(SortWord) => this.callAPI(SortWord)}/></span>
                             </Descriptions.Item>
                         </Descriptions>
                     </PageHeader>
@@ -153,7 +261,9 @@ class FileList extends React.Component {
                         itemLayout="horizontal"
                         dataSource={data}
                         renderItem={(item, index) => (
-                            <div className={"ant_list_box"}>
+                            <div
+                                className={this.state.selected.indexOf(index) >= 0 ? 'ant_list_box_selected' : 'ant_list_box'}
+                                name="alllist">
                                 <List.Item actions={[
                                     <a onClick={e => {
                                         document.getElementById("edit_title" + index).style.display = "inline";
@@ -172,7 +282,7 @@ class FileList extends React.Component {
                                         }} index={index} onRef={(child) => {
                                             this.child = child
                                         }}/>
-                                            <a href={"http://localhost:9000" + item.Path} target={'_blank'}
+                                            <a href={HOST + item.Path} target={'_blank'}
                                                id={"title" + index}>{item.File_Name}</a>
                                             <Edit_title filename={item.File_Name} index={index} data={data}
                                                         update={() => {
@@ -189,9 +299,9 @@ class FileList extends React.Component {
                         )}
                     />
                 }
-                <img id={"edit_img"} src={this.state.Edit_svg === true ? Edit_svg : Del_svg}
-                     onClick={this.del_or_edit.bind(this, data)}/>
-                <img id={"down_img"} src={Down_svg}/>
+                {/*<img id={"edit_img"} src={this.state.Edit_svg === true ? Edit_svg : Del_svg}*/}
+                {/*onClick={this.del_or_edit.bind(this, data)}/>*/}
+                {/*<img id={"down_img"} src={Down_svg}/>*/}
                 <div className={"pagination"}><Pagination showToal={2}
                     // defaultPageSize={3}
                                                           showQuickJumper
@@ -209,52 +319,8 @@ class FileList extends React.Component {
             </div>
         )
     }
-
-    del_or_edit = (data) => {
-        var b = !this.state.Edit_svg;
-        this.setState({
-            Edit_svg: b
-        });
-        var htmlCollection = document.getElementsByClassName("select_svg");
-        if (b === false) {// 点击了编辑
-            for (let i = 0; i < htmlCollection.length; i++) {
-                htmlCollection[i].style.display = "inline";
-            }
-            document.getElementById("down_img").style.display = "block";
-        } else {
-            for (let i = 0; i < htmlCollection.length; i++) {
-                htmlCollection[i].style.display = "none";
-            }
-        }
-        if (b === true) {// 点击了删除
-            let selecteddata = this.state.selected;
-            selecteddata.sort();
-            for (let i = selecteddata.length - 1; i >= 0; i--) {
-                let idx = selecteddata[i];
-                let tail = data[idx].File_Name.split('.')[1];
-                console.log(tail);
-                axios.post('http://localhost:9000/delete_file', {UID: this.state.UID, UUID: data[idx].UUID, tail: tail})
-                    .then((res) => {
-                        if (res.status === 200) ;
-                        else message.error("删除失败");
-                    }).catch(() => message.error("删除失败"));
-                data.splice(idx, 1)
-            }
-            message.success("删除了" + selecteddata.length + "个文件")
-            this.state.selected = [];
-            document.getElementById("down_img").style.display = "none";
-        }
-    };
     editname = () => {
         this.forceUpdate();
-    };
-    add_select = (index) => {
-        let idx = this.state.selected.indexOf(index);
-        if (idx === -1) {
-            this.state.selected.push(index);
-        } else {
-            this.state.selected.splice(idx, 1);
-        }
     };
 
     findFilePic = (State) => {
@@ -272,63 +338,6 @@ class FileList extends React.Component {
         }
     };
 
-    decodeTimeStamp = (timestamp) => {
-        var arrTimestamp = (timestamp + '').split('');
-        for (var start = 0; start < 13; start++) {
-            if (!arrTimestamp[start]) {
-                arrTimestamp[start] = '0';
-            }
-        }
-        timestamp = arrTimestamp.join('') * 1;
-
-        var minute = 1000 * 60;
-        var hour = minute * 60;
-        var day = hour * 24;
-        var halfamonth = day * 15;
-        var month = day * 30;
-        var now = new Date().getTime();
-        var diffValue = now - timestamp;
-
-        // 如果本地时间反而小于变量时间
-        if (diffValue < 0) {
-            return '不久前';
-        }
-
-        // 计算差异时间的量级
-        var monthC = diffValue / month;
-        var weekC = diffValue / (7 * day);
-        var dayC = diffValue / day;
-        var hourC = diffValue / hour;
-        var minC = diffValue / minute;
-
-        // 数值补0方法
-        var zero = function (value) {
-            if (value < 10) {
-                return '0' + value;
-            }
-            return value;
-        };
-
-        // 使用
-        if (monthC > 12) {
-            // 超过1年，直接显示年月日
-            return (function () {
-                var date = new Date(timestamp);
-                return date.getFullYear() + '年' + zero(date.getMonth() + 1) + '月' + zero(date.getDate()) + '日';
-            })();
-        } else if (monthC >= 1) {
-            return parseInt(monthC) + "月前";
-        } else if (weekC >= 1) {
-            return parseInt(weekC) + "周前";
-        } else if (dayC >= 1) {
-            return parseInt(dayC) + "天前";
-        } else if (hourC >= 1) {
-            return parseInt(hourC) + "小时前";
-        } else if (minC >= 1) {
-            return parseInt(minC) + "分钟前";
-        }
-        return '刚刚';
-    }
     getFileSize = (fileByte) => {
         var fileSizeByte = fileByte;
         var fileSizeMsg = "";

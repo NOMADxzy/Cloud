@@ -17,7 +17,7 @@ const tailLayout = {
 // const Demo = () => {
 //
 // }
-
+const HOST = 'http://8.141.72.17:9000';
 class ChangeAvatar extends React.Component {
     constructor(props) {
         super(props);
@@ -58,15 +58,19 @@ class ChangeAvatar extends React.Component {
     };
 
     submit = () => {
+        document.getElementById("loading").style.visibility = "visible";
         let UID = this.props.headstate.name;
-        axios.post('http://localhost:9000/set_avatar', {avatar: this.state.cur_src, UID: UID})
+        axios.post(HOST + '/set_avatar', {avatar: this.state.cur_src, UID: UID})
             .then((res) => {
-                document.getElementById('circle_img').src = 'http://localhost:9000' + this.state.cur_src;
+                document.getElementById('circle_img').src = HOST + this.state.cur_src;
                 message.success("头像修改成功");
                 document.getElementById('change_avt').style.display = 'none';
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                document.getElementById("loading").style.visibility = "hidden";
             })
 
     };
@@ -89,16 +93,16 @@ class ChangeAvatar extends React.Component {
                         return (
                             <span className={'hot_img'} onClick={this.changesrc.bind(this, value)}><Image width={30}
                                                                                                           height={30}
-                                                                                                          src={'http://localhost:9000' + value}
+                                                                                                          src={HOST + value}
                                                                                                           preview={false}
                                                                                                           alt={"图片"}/></span>
                         )
                     })}
-                    <small onClick={this.updateData}>换一批</small>
+                    <Button id={'refresh_hot_img'} size={'small'} onClick={this.updateData}>换一批</Button>
                 </div>
                 <div id={"avatar"}>
                     <img id={'upload_svg'} onClick={this.changepic} src={Avatar_upload}/>
-                    <Image src={'http://localhost:9000' + this.state.cur_src} width={120} height={120} preview={false}/>
+                    <Image src={HOST + this.state.cur_src} width={120} height={120} preview={false}/>
                 </div>
                 <div className={'opt_buts'}>
                     <Button type={'primary'} onClick={this.submit}>提交</Button>

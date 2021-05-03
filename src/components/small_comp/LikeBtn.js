@@ -4,6 +4,7 @@ import like_1 from '../../assets/images/svg/like_1.svg'
 import axios from 'axios'
 import {message} from 'antd'
 
+const HOST = 'http://8.141.72.17:9000';
 class LikeBtn extends React.Component {
     constructor(props) {
         super(props);
@@ -37,7 +38,7 @@ class LikeBtn extends React.Component {
             isliked: newstate
         });
         let UID = document.getElementById("username").innerText;
-        axios.get('http://localhost:9000/collect_file', {params: {UUID: this.state.UUID, UID: UID}})
+        axios.get(HOST + '/collect_file', {params: {UUID: this.state.UUID, UID: UID}})
             .catch(() => {
                 message.error("收藏失败")
             });

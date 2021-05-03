@@ -4,6 +4,7 @@ import React from 'react';
 import axios from "axios";
 import SparkMD5 from 'spark-md5'
 
+const HOST = 'http://8.141.72.17:9000';
 class MyUpload extends React.Component {
     state = {
         fileList: [],
@@ -48,12 +49,12 @@ class MyUpload extends React.Component {
                 authorization: 'authorization-text',
                 UID: this.state.UID,
             },
-            action: 'http://localhost:9000/upload',
+            action: HOST + '/upload',
             onChange: this.handleChange,
             multiple: true,
             data: (file) => file.uid,
             onPreview: (file) => {
-                window.open('http://localhost:9000/' + file.url)
+                window.open(HOST + '/' + file.url)
             },
             beforeUpload: this.get_filemd5sum
         };
@@ -93,7 +94,7 @@ class MyUpload extends React.Component {
                     formdata.append('file', file);
                     // console.log("formData-------",formdata);
 
-                    const url = "http://localhost:9000/uploads?md5=" + tmp_md5 + "&UID=" + document.getElementById("username").innerText;
+                    const url = HOST + "/uploads?md5=" + tmp_md5 + "&UID=" + document.getElementById("username").innerText;
                     axios(url, {
                         method: 'POST',
                         body: formdata,

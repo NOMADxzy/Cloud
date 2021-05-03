@@ -15,19 +15,14 @@
     /*justify-content: center;*/
 }
 
-.title {
-    /*border: #cccccc solid 1px;*/
-    /*background-color: #e8e8e8;*/
-}
-
 .title strong {
-    margin-left: 5%;
+    margin-left: 5px;
     font-size: larger;
 }
 
 .title img {
-    width: 15%;
-    height: 15%;
+    width: 30px;
+    height: 30px;
 }
 
 .opt_buts {

@@ -15,7 +15,7 @@ const tailLayout = {
 // const Demo = () => {
 //
 // }
-
+const HOST = 'http://8.141.72.17:9000';
 class ChangePwd extends React.Component {
     constructor(props) {
         super(props);
@@ -26,7 +26,7 @@ class ChangePwd extends React.Component {
 
     onFinish = (values: any) => {
         let UID = this.props.UID;
-        axios.post('http://localhost:9000/change_pwd', {UID: UID, old_pwd: values.old_pwd, new_pwd: values.new_pwd})
+        axios.post(HOST + '/change_pwd', {UID: UID, old_pwd: values.old_pwd, new_pwd: values.new_pwd})
             .then((res) => {
                 if (res.status === 200) {
                     message.success("修改成功");

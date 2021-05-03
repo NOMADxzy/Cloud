@@ -11,6 +11,7 @@ import InputBox from "./small_comp/InputBox"
 import ReactPlayer from 'react-player'
 import MyUpload from './small_comp/MyUpload'
 
+const HOST = 'http://8.141.72.17:9000';
 class DICM extends React.Component {
     constructor(props) {
         super(props);
@@ -46,9 +47,10 @@ class DICM extends React.Component {
     }
 
     getDatatest = () => {
+        document.getElementById("loading").style.visibility = "visible";
         let UID = this.state.UID;
         let keyword = this.props.location.search.substr(9);
-        axios.get('http://localhost:9000/get_numof_file', {
+        axios.get(HOST + '/get_numof_file', {
             params: {
                 UID: UID,
                 State: 1,
@@ -61,7 +63,7 @@ class DICM extends React.Component {
                 this.setState({total: res.data[0]['COUNT(*)']})
             })
             .catch((err) => console.log(err));
-        axios.get("http://localhost:9000/get_user_file", {
+        axios.get(HOST + "/get_user_file", {
             params: {
                 UID: UID,
                 Del: 0,
@@ -76,6 +78,9 @@ class DICM extends React.Component {
                 this.setState({
                     list: res.data
                 })
+            })
+            .finally(() => {
+                document.getElementById("loading").style.visibility = "hidden";
             })
     };
     onchange = page => {
@@ -111,7 +116,7 @@ class DICM extends React.Component {
                         data.map((value, key) => {
                             return (
                                 <span className={"pic_box"}>
-                                <Image width={145} height={100} src={"http://localhost:9000" + value.Path}
+                                <Image width={145} height={100} src={HOST + value.Path}
                                        alt={"图片"}/><br/>
                                 <small className={'dcim_pic_name'}>{value.File_Name}</small>
                             </span>
@@ -119,8 +124,8 @@ class DICM extends React.Component {
                         })
                     }
                 </div>
-                <img id={"edit_img"} src={this.state.Edit_svg === true ? Edit_svg : Del_svg}
-                     onClick={this.del_or_edit}/>
+                {/*<img id={"edit_img"} src={this.state.Edit_svg === true ? Edit_svg : Del_svg}*/}
+                {/*onClick={this.del_or_edit}/>*/}
                 {/*--------------------------------------------------尾部-----------------------------------------------*/}
                 <div id={"dcim_pagi"}>
                     <Pagination

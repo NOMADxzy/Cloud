@@ -5,7 +5,7 @@
     background-color: #C5D3D3;
     padding: 4% 4%;
     margin-left: 35%;
-    margin-top: 8%;
+    margin-top: 40%;
     z-index: 3;
     box-shadow: 5px 8px 5px 5px #cccccc;
 }
@@ -16,12 +16,9 @@
     left: -10px;
 }
 
-#change_avt small {
+#refresh_hot_img {
     position: relative;
-    top: -10px;
-    cursor: pointer;
-    border: #444444 solid 1px;
-    margin-left: 10px;
+    bottom: 10px;
 }
 
 #change_avt small:hover {

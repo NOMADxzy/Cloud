@@ -9,7 +9,9 @@ import SearchWrap from './small_comp/SearchWrap'
 import ChangePwd from './small_comp/ChangePwd'
 import axios from 'axios'
 import ChangeAvatar from "./small_comp/ChangeAvatar";
+import MyUpload from "./small_comp/MyUpload";
 
+const HOST = 'http://8.141.72.17:9000';
 class Head extends React.Component {
     constructor(props) {
         super(props);
@@ -30,7 +32,7 @@ class Head extends React.Component {
         this.setState({
             name: name,
         });
-        axios.get('http://localhost:9000/get_avatar', {params: {UID: name}})
+        axios.get(HOST + '/get_avatar', {params: {UID: name}})
             .then((res) => {
                 this.setState({head_img: res.data});
                 this.chg_avt.changesrc(res.data);
@@ -49,14 +51,17 @@ class Head extends React.Component {
                          height={50}/>
                 <strong>FileHub</strong>
                 </span>
-                <Link to={"/" + this.state.name + "/all"}><b>云盘</b></Link>
-                <Link to="/DICM"><b>相册</b></Link>
-                <Link to="/More"><b>空间详情</b></Link>
+                <span className={'top_tab'}>
+                    <Link to={"/" + this.state.name + "/all"}><b>云盘</b></Link>
+                    <Link to="/DICM"><b>相册</b></Link>
+                    <Link to="/More"><b>空间详情</b></Link>
+                </span>
+                <SearchWrap/>
+                <ChangeAvatar headstate={this.state} onRef={(c) => this.chg_avt = c}/>
                 <span className={"dropdown"}>
-                    <img id="man_svg" src={Man_svg}/>
+                    <img id={"circle_img"} src={HOST + this.state.head_img}/>
                     <strong className="username" id={"username"}>{this.state.name}</strong>
-                    <img id={"circle_img"} src={'http://localhost:9000' + this.state.head_img}/>
-                    <ChangeAvatar headstate={this.state} onRef={(c) => this.chg_avt = c}/>
+                    <img id="man_svg" src={Man_svg}/>
                     <div className={"dropdown_content"}>
                         <a onClick={() => {
                             document.getElementById("change_avt").style.display = "block"
@@ -67,7 +72,6 @@ class Head extends React.Component {
                         <a>帮助中心</a>
                     </div>
                 </span>
-                <SearchWrap/>
             </div>
         )
     }

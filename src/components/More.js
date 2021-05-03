@@ -2,6 +2,7 @@ import React from 'react';
 import {Progress} from 'antd'
 import axios from 'axios'
 
+const HOST = 'http://8.141.72.17:9000';
 class Useage extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +14,8 @@ class Useage extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:9000/get_file_size?UID=' + document.getElementById("username").innerText)
+        document.getElementById("loading").style.visibility = "visible";
+        axios.get(HOST + '/get_file_size?UID=' + document.getElementById("username").innerText)
             .then((res) => {
                 // console.log(res.data);
                 // let pic = res.data[0].Space;
@@ -43,6 +45,9 @@ class Useage extends React.Component {
             })
             .catch((err) => {
                 console.log(err);
+            })
+            .finally(() => {
+                document.getElementById("loading").style.visibility = "hidden";
             })
 
     }

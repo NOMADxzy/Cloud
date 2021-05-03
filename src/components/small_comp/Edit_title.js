@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios'
 
+const HOST = 'http://8.141.72.17:9000';
 class Edit_title extends React.Component {
     constructor(props) {
         super(props);
@@ -15,7 +16,7 @@ class Edit_title extends React.Component {
         });
     };
     Submit = (e) => {
-        axios.post('http://localhost:9000/change_file_name', {
+        axios.post(HOST + '/change_file_name', {
             UUID: this.props.data[this.props.index].UUID,
             NAME: e.target.value
         })
