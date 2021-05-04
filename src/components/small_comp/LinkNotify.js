@@ -3,18 +3,16 @@ import React from 'react';
 import {Progress} from 'antd'
 import axios from 'axios'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
+import AudioItem from './AudioItem'
 
 const HOST = 'http://8.141.72.17:9000';
 class LinkNotify extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {};
+        // props.onRef(this);
     }
 
-    copyText = (text) => { // text: 要复制的内容， callback: 回调
-        let clipBoardContent = '123';
-        window.clipboardData.setData("Text", clipBoardContent);
-    };
     openNotification = (data) => {
         const key = `open${Date.now()}`;
         const btn = (
@@ -26,7 +24,6 @@ class LinkNotify extends React.Component {
             message: '链接已生成',
             description: data.link + '\n提取码：' + data.code,
             btn,
-
             key,
             // onClose: (link)=>this.copyText(link),
         });

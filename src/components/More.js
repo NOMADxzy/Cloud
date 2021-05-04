@@ -1,6 +1,8 @@
 import React from 'react';
 import {Progress} from 'antd'
 import axios from 'axios'
+import VideoItem from './small_comp/VideoItem'
+import VideoTab from "./small_comp/VideoTab";
 
 const HOST = 'http://8.141.72.17:9000';
 class Useage extends React.Component {
@@ -32,15 +34,18 @@ class Useage extends React.Component {
                     sizelist.push(res.data[i].Space);
                     sum += res.data[i].Space;
                 }
+                if (sum === 0) sum = 1;
                 for (let i = 0; i < 5; i++) {
                     percentlist.push(('' + sizelist[i] * 100 / sum).substr(0, 4));
                 }
                 console.log(sizelist);
                 console.log(percentlist);
+                let sum_fix = sum * 10 / (1024 * 1024 * 1024 * 8);
+                if (sum_fix < 0.01) sum_fix = 0;
                 this.setState({
                     sizelist: sizelist,
                     percentlist: percentlist,
-                    useage: ('' + sum * 10 / (1024 * 1024 * 1024 * 8)).substr(0, 4)
+                    useage: ('' + sum_fix).substr(0, 4)
                 })
             })
             .catch((err) => {

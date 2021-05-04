@@ -51,6 +51,10 @@ code {
     color: #357ebd;
 }
 
+.top_tab {
+    margin: 5%;
+}
+
 #circle_img {
     border-radius: 50%;
     width: 40px;
@@ -366,4 +370,59 @@ article {
     margin-left: 49%;
     z-index: 5;
     visibility: hidden;
+}
+
+.music_list {
+    max-height: 50px;
+
+}
+
+.music_list p {
+    padding: 4px 0px;
+    cursor: pointer;
+    border-bottom: #C5D3D3;
+    overflow: hidden; /*超出部分隐藏*/
+    white-space: nowrap; /*不换行*/
+    text-overflow: ellipsis;
+}
+
+.music_list p:hover {
+    color: #66afe9;
+}
+
+.blue_item p {
+    color: #66afe9;
+}
+
+#music_title {
+    max-width: 40px;
+    overflow: hidden; /*超出部分隐藏*/
+    white-space: nowrap; /*不换行*/
+    text-overflow: ellipsis;
+}
+
+.video_box {
+    padding: 10px 5px;
+    font-size: larger;
+}
+
+#video_bar {
+    position: fixed;
+    right: 0%;
+    top: 30%;
+    /*width: 2%;*/
+    /*height: 8%;*/
+    /*background-color: #357ebd;*/
+    /*height: 4em;*/
+    /*cursor: pointer;*/
+}
+
+#video_bar :hover {
+    /*background-color: deepskyblue;*/
+}
+
+#video_bar i {
+    color: whitesmoke;
+    padding: 10px 4px;
+    writing-mode: tb-rl;
 }

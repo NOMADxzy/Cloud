@@ -10,6 +10,9 @@ import ChangePwd from './small_comp/ChangePwd'
 import axios from 'axios'
 import ChangeAvatar from "./small_comp/ChangeAvatar";
 import MyUpload from "./small_comp/MyUpload";
+import {Tabs} from 'antd';
+
+const {TabPane} = Tabs;
 
 const HOST = 'http://8.141.72.17:9000';
 class Head extends React.Component {
@@ -42,7 +45,19 @@ class Head extends React.Component {
     getName = () => {
         return this.state.name;
     };
-
+    changeTopItem = (key) => {
+        switch (key) {
+            case '1':
+                document.getElementById('FILE').click();
+                break;
+            case '2':
+                document.getElementById('DICM').click();
+                break;
+            case '3':
+                document.getElementById('More').click();
+                break;
+        }
+    };
     render() {
         return (
             <div className="head">
@@ -52,10 +67,21 @@ class Head extends React.Component {
                 <strong>FileHub</strong>
                 </span>
                 <span className={'top_tab'}>
-                    <Link to={"/" + this.state.name + "/all"}><b>云盘</b></Link>
-                    <Link to="/DICM"><b>相册</b></Link>
-                    <Link to="/More"><b>空间详情</b></Link>
+                    <Tabs defaultActiveKey="1" onChange={this.changeTopItem} centered
+                          size={'large'} tabBarGutter={30}>
+                        <TabPane tab="文件" key="1"/>
+                        <TabPane tab="相册" key="2"/>
+                        <TabPane tab="空间" key="3"/>
+                     </Tabs>
                 </span>
+                <Link to={"/" + this.state.name + "/all"}><p id={'FILE'} style={{display: 'none'}}>1</p></Link>
+                <Link to={"/DICM"}><p id={'DICM'} style={{display: 'none'}}>1</p></Link>
+                <Link to={"/More"}><p id={'More'} style={{display: 'none'}}>1</p></Link>
+                {/*<span className={'top_tab'}>*/}
+                {/*<Link to={"/" + this.state.name + "/all"}><b>云盘</b></Link>*/}
+                {/*<Link to="/DICM"><b>相册</b></Link>*/}
+                {/*<Link to="/More"><b>空间详情</b></Link>*/}
+                {/*</span>*/}
                 <SearchWrap/>
                 <ChangeAvatar headstate={this.state} onRef={(c) => this.chg_avt = c}/>
                 <span className={"dropdown"}>

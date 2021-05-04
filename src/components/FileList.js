@@ -6,6 +6,7 @@ import Jpg from "../assets/images/FileType/jpg.jpg"
 import Mp4 from "../assets/images/FileType/mp4.jpg"
 import Mp3 from "../assets/images/FileType/mp3.png"
 import Doc from "../assets/images/FileType/doc.jpg"
+import UNK from "../assets/images/FileType/unknown.jpeg"
 // import ReactPullToRefresh from 'react-pull-to-refresh'
 import {List, Avatar, Pagination, PageHeader, Button, Descriptions, message, Tooltip} from 'antd'
 import LikeBtn from "./small_comp/LikeBtn"
@@ -21,6 +22,8 @@ import SearchWrap from './small_comp/SearchWrap'
 import LinkNotify from './small_comp/LinkNotify'
 import LinkTitle from './small_comp/LinkTitle'
 import FileSort from './small_comp/FileSort'
+import MusicTab from './small_comp/MusicTab'
+import VideoTab from "./small_comp/VideoTab";
 
 const HOST = 'http://8.141.72.17:9000';
 class FileList extends React.Component {
@@ -213,7 +216,15 @@ class FileList extends React.Component {
         for (let i = 0; i < htmlCollection.length; i++) {
             htmlCollection[i].style.display = "none";
         }
-    }
+    };
+    handleJump = (e, item) => {
+        // console.log(item);
+        if (item.State === 3) {
+            e.preventDefault();
+            // this.myNotify.playMusic(item);
+            this.musictab.playMusic(item);
+        }
+    };
 
     render() {
         var data = this.state.list;
@@ -224,7 +235,7 @@ class FileList extends React.Component {
                     <PageHeader
                         ghost={false}
                         onBack={() => window.history.back()}
-                        title="云盘"
+                        title="文件"
                         subTitle=""
                         extra={[
                             this.state.Edit_svg ? <Tooltip title={'刷新列表内容'}><Button key="1" onClick={this.callAPI}
@@ -282,7 +293,8 @@ class FileList extends React.Component {
                                         }} index={index} onRef={(child) => {
                                             this.child = child
                                         }}/>
-                                            <a href={HOST + item.Path} target={'_blank'}
+                                            <a href={HOST + item.Path} onClick={(e) => this.handleJump(e, item)}
+                                               target={'_blank'}
                                                id={"title" + index}>{item.File_Name}</a>
                                             <Edit_title filename={item.File_Name} index={index} data={data}
                                                         update={() => {
@@ -302,6 +314,8 @@ class FileList extends React.Component {
                 {/*<img id={"edit_img"} src={this.state.Edit_svg === true ? Edit_svg : Del_svg}*/}
                 {/*onClick={this.del_or_edit.bind(this, data)}/>*/}
                 {/*<img id={"down_img"} src={Down_svg}/>*/}
+                <MusicTab onRef={(musictab) => this.musictab = musictab} fstate={this.state}/>
+                <VideoTab onRef={(videotab) => this.videotab = videotab} fstate={this.state}/>
                 <div className={"pagination"}><Pagination showToal={2}
                     // defaultPageSize={3}
                                                           showQuickJumper
@@ -334,7 +348,7 @@ class FileList extends React.Component {
             case 4:
                 return Doc;
             default:
-                return Doc
+                return UNK;
         }
     };
 
@@ -342,7 +356,7 @@ class FileList extends React.Component {
         var fileSizeByte = fileByte;
         var fileSizeMsg = "";
         if (fileSizeByte < 1048576) fileSizeMsg = (fileSizeByte / 1024).toFixed(0) + "KB";
-        else if (fileSizeByte == 1048576) fileSizeMsg = "1MB";
+        else if (fileSizeByte === 1048576) fileSizeMsg = "1MB";
         else if (fileSizeByte > 1048576 && fileSizeByte < 1073741824) fileSizeMsg = (fileSizeByte / (1024 * 1024)).toFixed(0) + "MB";
         else if (fileSizeByte > 1048576 && fileSizeByte == 1073741824) fileSizeMsg = "1GB";
         else if (fileSizeByte > 1073741824 && fileSizeByte < 1099511627776) fileSizeMsg = (fileSizeByte / (1024 * 1024 * 1024)).toFixed(0) + "GB";

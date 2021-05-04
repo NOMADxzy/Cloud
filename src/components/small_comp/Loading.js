@@ -8,7 +8,7 @@ class Loading extends React.Component {
 
     render() {
         return (
-            <div className="spinner">
+            <div className="spinner_loading">
                 <div className="rect1"></div>
                 <div className="rect2"></div>
                 <div className="rect3"></div>

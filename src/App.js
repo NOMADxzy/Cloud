@@ -13,6 +13,8 @@ import Tab from './components/leftTab'
 import ChangePwd from "./components/small_comp/ChangePwd";
 import ChangeAvatar from "./components/small_comp/ChangeAvatar";
 import Loading from "./components/small_comp/Loading";
+import AudioItem from './components/small_comp/AudioItem'
+import {Button} from 'antd'
 
 
 
@@ -60,12 +62,8 @@ class App extends React.Component {
                         {/*<Route exact path="/:UID" component={Files}/>*/}
                         <Route exact path="/:UID/:type" component={Files}/>
                         <Route path="/:UID/useage" component={Useage}/>
-
                     </article>
-                    {/*<Me/>*/}
                 </div>
-
-
             </Router>
 
         );

@@ -8,7 +8,7 @@ class Select extends React.Component {
         this.state = {
             id: "未收到",
             selected: false
-        }
+        };
         props.onRef(this);
     }
 
