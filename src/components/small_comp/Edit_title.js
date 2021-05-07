@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios'
+import {message} from 'antd'
 
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 class Edit_title extends React.Component {
     constructor(props) {
         super(props);
@@ -21,10 +22,11 @@ class Edit_title extends React.Component {
             NAME: e.target.value
         })
             .then((res) => {
-                console.log(res);
-                console.log("修改为" + e.target.value);
+                // console.log(res);
+                // console.log("修改为" + e.target.value);
                 this.props.data[this.props.index].File_Name = e.target.value;
                 this.props.update();
+                message.success("修改为" + e.target.value);
             })
             .catch((err) => {
                 console.log(err)

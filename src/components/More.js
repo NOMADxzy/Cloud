@@ -4,7 +4,7 @@ import axios from 'axios'
 import VideoItem from './small_comp/VideoItem'
 import VideoTab from "./small_comp/VideoTab";
 
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 class Useage extends React.Component {
     constructor(props) {
         super(props);
@@ -19,14 +19,6 @@ class Useage extends React.Component {
         document.getElementById("loading").style.visibility = "visible";
         axios.get(HOST + '/get_file_size?UID=' + document.getElementById("username").innerText)
             .then((res) => {
-                // console.log(res.data);
-                // let pic = res.data[0].Space;
-                // let vid = res.data[1].Space;
-                // let mus = res.data[2].Space;
-                // let doc = res.data[3].Space;
-                // let other = res.data[4].Space;
-                // let all = pic+vid+mus+doc+other;
-                // console.log(all);
                 var sum = 0;
                 var sizelist = [];
                 var percentlist = [];
@@ -59,7 +51,7 @@ class Useage extends React.Component {
 
     render() {
         return (
-            <div className={"useage"}>总容量：10GB
+            <div className={"useage"}>总容量：100GB
 
                 <div id={"circle_progress"}>
 

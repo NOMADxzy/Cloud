@@ -5,7 +5,7 @@ import axios from 'axios'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import AudioItem from './AudioItem'
 
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 class LinkNotify extends React.Component {
     constructor(props) {
         super(props);

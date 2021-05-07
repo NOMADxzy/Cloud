@@ -2,7 +2,7 @@ import {Upload, message, Button, Progress} from 'antd';
 import {UploadOutlined} from '@ant-design/icons';
 import React from "react";
 
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 class Avatarupload extends React.Component {
     constructor(props) {
         super(props);

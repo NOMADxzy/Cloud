@@ -3,8 +3,7 @@ import {Progress} from 'antd'
 import {Player} from 'video-react';
 import "../../../node_modules/video-react/dist/video-react.css";
 
-const HOST = 'http://8.141.72.17:9000';
-
+const HOST = 'http://121.5.241.177:9000';
 class VideoItem extends React.Component {
     constructor(props) {
         super(props);

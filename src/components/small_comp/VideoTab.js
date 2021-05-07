@@ -1,13 +1,12 @@
-import {Button, message, notification} from 'antd';
+import {Button, message, notification, Tooltip} from 'antd';
 import React from 'react';
 import {Progress, Drawer} from 'antd'
 import axios from 'axios'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import VideoItem from './VideoItem'
-import {MenuUnfoldOutlined} from '@ant-design/icons'
+import {PlaySquareOutlined, PlusOutlined} from '@ant-design/icons'
 
-const HOST = 'http://8.141.72.17:9000';
-
+const HOST = 'http://121.5.241.177:9000';
 class VideoTab extends React.Component {
     constructor(props) {
         super(props);
@@ -63,8 +62,10 @@ class VideoTab extends React.Component {
     render() {
         return (
             <div>
-                <div id={'video_bar'} onClick={this.playMusic}><Button shape={'circle'} icon={<MenuUnfoldOutlined/>}/>
-                </div>
+                <Tooltip title={'播放视频'} placement={'left'}>
+                    <Button id={'video_bar'} onClick={this.playMusic} shape={'circle'} icon={<PlaySquareOutlined/>}/>
+                </Tooltip>
+
                 <Drawer
                     title="播放列表"
                     placement="right"

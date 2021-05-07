@@ -1,12 +1,12 @@
-import {Button, message, notification} from 'antd';
+import {Button, message, notification, Tooltip} from 'antd';
 import React from 'react';
 import {Progress, Drawer} from 'antd'
 import axios from 'axios'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import AudioItem from './AudioItem'
+import {CustomerServiceOutlined} from "@ant-design/icons";
 
-const HOST = 'http://8.141.72.17:9000';
-
+const HOST = 'http://121.5.241.177:9000';
 class MusicTab extends React.Component {
     constructor(props) {
         super(props);
@@ -47,6 +47,15 @@ class MusicTab extends React.Component {
             }
         })
             .then((res) => {
+                //点击了右边栏，播放第一首
+                if (item.Path === undefined) {
+                    item = res.data[0];
+                }
+                //没有音乐
+                if (item.Path === undefined) {
+                    message.warn('您还没有音乐');
+                    return;
+                }
                 for (var i = 0; i < res.data.length; i++) {
                     if (res.data[i].UUID === item.UUID) {
                         break;
@@ -58,7 +67,7 @@ class MusicTab extends React.Component {
                         idx: i,
                     });
                     const btn = (
-                        <AudioItem Path={this.state.mus_list[this.state.idx].Path}
+                        <AudioItem Path={item.Path}
                                    onRef={(child) => this.child = child} next={this.next}
                                    pre={this.pre} showdrawer={this.showdrawer}/>
                     );
@@ -85,7 +94,7 @@ class MusicTab extends React.Component {
         })
     };
     handleClick = (value) => {
-        console.log(value)
+        console.log(value);
         for (var i = 0; i < this.state.mus_list.length; i++) {
             if (this.state.mus_list[i].UUID === value.UUID) {
                 break;
@@ -104,22 +113,28 @@ class MusicTab extends React.Component {
 
     render() {
         return (
-            <Drawer
-                title="播放列表"
-                placement="left"
-                closable={true}
-                onClose={this.onClose}
-                visible={this.state.drawer}
-                zIndex={6}
-            >
-                <div className={'music_list'}>
-                    {this.state.mus_list.map(((value, key) => {
-                        return (<p key={key} style={{color: this.state.idx === key ? '#66afe9' : ''}}
-                                   onClick={() => this.handleClick(value)}>{value.File_Name}</p>)
-                    }))
-                    }
-                </div>
-            </Drawer>
+            <div>
+                <Tooltip title={'播放音乐'} placement={'left'}>
+                    <Button id={'music_right_bar'} onClick={this.playMusic} shape={'circle'}
+                            icon={<CustomerServiceOutlined/>}/>
+                </Tooltip>
+                <Drawer
+                    title="播放列表"
+                    placement="left"
+                    closable={true}
+                    onClose={this.onClose}
+                    visible={this.state.drawer}
+                    zIndex={6}
+                >
+                    <div className={'music_list'}>
+                        {this.state.mus_list.map(((value, key) => {
+                            return (<p key={key} style={{color: this.state.idx === key ? '#66afe9' : ''}}
+                                       onClick={() => this.handleClick(value)}>{value.File_Name}</p>)
+                        }))
+                        }
+                    </div>
+                </Drawer>
+            </div>
         )
     }
 }

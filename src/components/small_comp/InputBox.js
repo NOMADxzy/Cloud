@@ -14,7 +14,7 @@ const tailLayout = {
 // const Demo = () => {
 //
 // }
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 class InputBox extends React.Component {
     constructor(props) {
         super(props);
@@ -87,6 +87,31 @@ class InputBox extends React.Component {
         this.setState({login: !old});
         this.inputform.resetFields();
     };
+    judgePwd = (rule, value, callback) => {
+        if (this.state.login) callback();
+        const {form} = this.props;
+        // 校验密码强度
+        // 1. 必须同时包含大写字母、小写字母和数字，三种组合
+        // 2. 长度在8-30之间
+        const passwordReg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/;
+        if (value) {
+            if (!passwordReg.test(value)) {
+                callback("必须含大、小写字母和数字");
+            }
+            if (value.length < 8 || value.length > 30) {
+                callback("密码长度8-30位");
+            }
+        }
+        callback();
+    };
+    comparePassword = (rule, value, callback) => {
+        let firstpwd = this.inputform.getFieldValue().password;
+        if (value !== firstpwd) {
+            callback('两次密码输入不一致!');
+        } else {
+            callback();
+        }
+    };
 
 
     render() {
@@ -103,6 +128,7 @@ class InputBox extends React.Component {
                     <Form.Item
                         label="账号"
                         name="username"
+                        validateFirst
                         rules={[{required: true, message: ''}, {validator: this.judgeUid}]}
                     >
                         <Input placeHolder={"输入账号"}/>
@@ -111,9 +137,9 @@ class InputBox extends React.Component {
                     <Form.Item
                         label="密码"
                         name="password"
-                        rules={[{required: true, message: ''}]}
+                        rules={[{required: true, message: ''}, {validator: this.judgePwd}]}
                     >
-                        <Input.Password placeholder={"输入密码"}/>
+                        <Input.Password id={'pwd'} placeholder={"输入密码"}/>
                     </Form.Item>
                     {this.state.login ?
                         <Form.Item {...tailLayout} name="remember" valuePropName="checked">
@@ -123,7 +149,7 @@ class InputBox extends React.Component {
                         <Form.Item
                             label="密码"
                             name="again_pwd"
-                            rules={[{required: true, message: ''}]}
+                            rules={[{required: true, message: ''}, {validator: this.comparePassword}]}
                         >
                             <Input.Password placeholder={"再次输入密码"}/>
                         </Form.Item>

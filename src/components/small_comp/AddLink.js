@@ -18,7 +18,7 @@ const tailLayout = {
     wrapperCol: {offset: 8, span: 16},
 };
 
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 class AddLink extends React.Component {
     constructor(props) {
         super(props);
@@ -106,35 +106,36 @@ class AddLink extends React.Component {
                 {/*<img src={this.state.avatar} style={{width:20}}/>*/}
                 {/*<strong>{this.state.File_Name}</strong>*/}
                 {/*</div>*/}
-                {/*<Card*/}
-                {/*hoverable*/}
-                {/*style={{width: 350}}*/}
-                {/*cover={<div className={'title'}>*/}
-                {/*<img alt="example" src={this.state.avatar}/>*/}
-                {/*<strong>{this.state.File_Name}</strong>*/}
-                {/*</div>}>*/}
-                {/*<div>*/}
-                {/*<span className={"detail"}><i>来源：</i>{this.state.from}<br/></span>*/}
-                {/*<span className={"detail"}><i>大小：</i>{this.props.getFileSize(this.state.Size)}<br/></span>*/}
-                {/*<span className={"detail"}><i>时间：</i>{new Date(this.state.sharedate).toLocaleDateString()}<br/></span>*/}
-                {/*<span className={"detail"}><i>保存次数：</i>{this.state.savetimes}<br/></span>*/}
-                {/*</div>*/}
-                {/*<div className={'opt_buts'}>*/}
-                {/*<Button onClick={this.callAddLink}>添加</Button>*/}
-                {/*<Button onClick={this.cancel}>取消</Button>*/}
-                {/*</div>*/}
-                {/*</Card>*/}
-                <Modal title="文件" width={440} visible={this.state.view === 'file'} onOk={this.callAddLink}
-                       onCancel={this.cancel}>
+                <Card
+                    hoverable
+                    style={{width: 350}}
+                    cover={
                     <div className={'title'}>
                         <img alt="example" src={this.state.avatar}/>
                         <strong>{this.state.File_Name}</strong>
+                    </div>}>
+                    <div>
+                        <span className={"detail"}><i>来源：</i>{this.state.from}<br/></span>
+                        <span className={"detail"}><i>大小：</i>{this.props.getFileSize(this.state.Size)}<br/></span>
+                        <span className={"detail"}><i>时间：</i>{new Date(this.state.sharedate).toLocaleDateString()}<br/></span>
+                        <span className={"detail"}><i>保存次数：</i>{this.state.savetimes}<br/></span>
                     </div>
-                    <p className={"detail"}><i>来源：</i>{this.state.from}<br/></p>
-                    <p className={"detail"}><i>大小：</i>{this.props.getFileSize(this.state.Size)}<br/></p>
-                    <p className={"detail"}><i>时间：</i>{new Date(this.state.sharedate).toLocaleDateString()}<br/></p>
-                    <p className={"detail"}><i>保存次数：</i>{this.state.savetimes}<br/></p>
-                </Modal>
+                    <div className={'opt_buts'}>
+                        <Button onClick={this.callAddLink}>添加</Button>
+                        <Button onClick={this.cancel}>取消</Button>
+                    </div>
+                </Card>
+                {/*<Modal title="文件" width={440} visible={this.state.view === 'file'} onOk={this.callAddLink}*/}
+                {/*onCancel={this.cancel}>*/}
+                {/*<div className={'title'}>*/}
+                {/*<img alt="example" src={this.state.avatar}/>*/}
+                {/*<strong>{this.state.File_Name}</strong>*/}
+                {/*</div>*/}
+                {/*<p className={"detail"}><i>来源：</i>{this.state.from}<br/></p>*/}
+                {/*<p className={"detail"}><i>大小：</i>{this.props.getFileSize(this.state.Size)}<br/></p>*/}
+                {/*<p className={"detail"}><i>时间：</i>{new Date(this.state.sharedate).toLocaleDateString()}<br/></p>*/}
+                {/*<p className={"detail"}><i>保存次数：</i>{this.state.savetimes}<br/></p>*/}
+                {/*</Modal>*/}
             </div>);
         else return (
             <div id={"add_link"}>

@@ -1,12 +1,14 @@
 import React from 'react';
-import {Progress} from 'antd'
+import {Progress, Button} from 'antd'
 import {Link} from 'react-router-dom'
+import {SearchOutlined, LoadingOutlined} from '@ant-design/icons'
 
 class SearchWrap extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            val: ''
+            val: '',
+            icon: <SearchOutlined/>
         }
     }
 
@@ -15,16 +17,21 @@ class SearchWrap extends React.Component {
             val: this.inputValue.value
         })
     };
-    searchFile = () => {
+    searchFile = (e) => {
+        this.setState({icon: <LoadingOutlined/>});
         this.searchkey.click();
-        this.inputValue.value = '';
+        setTimeout(() => {
+            this.inputValue.value = '';
+            this.setState({icon: <SearchOutlined/>});
+        }, 500);
     };
 
     render() {
         return (
             <span className="search-wrapper">
                     <input ref={(input) => this.inputValue = input} placeholder="搜索我的文件" onChange={this.change}/>
-                    <button type="button" onClick={this.searchFile}>搜索</button>
+                <Button type="primary" ref={(searchBtn) => this.searchBtn = searchBtn}
+                        onClick={(e) => this.searchFile(e)} icon={this.state.icon}>搜索</Button>
                 <Link to={"?keyword=" + this.state.val}><a ref={(searchkey) => {
                     this.searchkey = searchkey
                 }} style={{display: "none"}}/></Link>

@@ -9,7 +9,7 @@ class Select extends React.Component {
             id: "未收到",
             selected: false
         };
-        props.onRef(this);
+        // props.onRef(this);
     }
 
     componentWillReceiveProps() {
@@ -23,7 +23,7 @@ class Select extends React.Component {
         var b = !this.state.selected;
         this.setState({
             selected: b
-        })
+        });
         this.props.addSelect(this.state.id);
     };
 

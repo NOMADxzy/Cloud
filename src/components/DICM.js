@@ -11,7 +11,7 @@ import InputBox from "./small_comp/InputBox"
 import ReactPlayer from 'react-player'
 import MyUpload from './small_comp/MyUpload'
 
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 class DICM extends React.Component {
     constructor(props) {
         super(props);

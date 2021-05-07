@@ -17,7 +17,7 @@ const tailLayout = {
 // const Demo = () => {
 //
 // }
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 class ChangeAvatar extends React.Component {
     constructor(props) {
         super(props);

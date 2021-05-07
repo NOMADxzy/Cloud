@@ -6,8 +6,9 @@
     position: fixed;
     background-color: #cccccc;
     margin-left: 20%;
-    z-index: 3;
+    /*z-index: 3;*/
     box-shadow: 5px 8px 5px 5px #cccccc;
+    z-index: 11;
 }
 
 #link_code {
@@ -15,9 +16,18 @@
     /*justify-content: center;*/
 }
 
+.title {
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}
+
 .title strong {
     margin-left: 5px;
     font-size: larger;
+    overflow: hidden; /*超出部分隐藏*/
+    white-space: nowrap; /*不换行*/
+    text-overflow: ellipsis;
 }
 
 .title img {

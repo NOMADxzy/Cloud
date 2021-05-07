@@ -14,7 +14,7 @@ import pre from '../../assets/images/svg/上一项.svg';
 import '../../assets/css/AudioItem.css';
 import {TablePipeline as state} from "ali-react-table";
 
-const HOST = 'http://8.141.72.17:9000';
+const HOST = 'http://121.5.241.177:9000';
 
 class AudioItem extends React.Component {
     constructor(props) {
@@ -202,7 +202,7 @@ class AudioItem extends React.Component {
                                 <b className="audio-item-current">{currentDurationStr}</b>
                                 <b className="audio-item-duration">{durationStr}</b>
                                 <div><Button size={'small'} onClick={this.props.showdrawer}
-                                             icon={<MenuUnfoldOutlined/>}/></div>
+                                             icon={<MenuUnfoldOutlined/>} id={'show_music_list_btn'}/></div>
                             </div>
                         </div>
                         <div className="audio-item-bottom">
