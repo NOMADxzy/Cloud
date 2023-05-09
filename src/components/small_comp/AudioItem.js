@@ -14,7 +14,8 @@ import pre from '../../assets/images/svg/上一项.svg';
 import '../../assets/css/AudioItem.css';
 import {TablePipeline as state} from "ali-react-table";
 
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 
 class AudioItem extends React.Component {
     constructor(props) {

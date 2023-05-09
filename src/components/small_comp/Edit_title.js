@@ -2,7 +2,8 @@ import React from 'react';
 import axios from 'axios'
 import {message} from 'antd'
 
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 class Edit_title extends React.Component {
     constructor(props) {
         super(props);

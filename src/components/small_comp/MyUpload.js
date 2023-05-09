@@ -4,7 +4,8 @@ import React from 'react';
 import axios from "axios";
 import SparkMD5 from 'spark-md5'
 
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 class MyUpload extends React.Component {
     state = {
         fileList: [],

@@ -4,7 +4,8 @@ import axios from 'axios'
 import VideoItem from './small_comp/VideoItem'
 import VideoTab from "./small_comp/VideoTab";
 
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 class Useage extends React.Component {
     constructor(props) {
         super(props);

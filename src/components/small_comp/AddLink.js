@@ -18,7 +18,8 @@ const tailLayout = {
     wrapperCol: {offset: 8, span: 16},
 };
 
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 class AddLink extends React.Component {
     constructor(props) {
         super(props);

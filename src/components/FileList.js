@@ -29,7 +29,8 @@ import fileDownload from 'js-file-download'
 import FileViewer from 'react-file-viewer';
 
 const {confirm} = Modal;
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 class FileList extends React.Component {
     constructor(props) {
         super(props);

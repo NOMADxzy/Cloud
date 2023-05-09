@@ -6,7 +6,8 @@ import {CopyToClipboard} from 'react-copy-to-clipboard'
 import AudioItem from './AudioItem'
 import {CustomerServiceOutlined} from "@ant-design/icons";
 
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 class MusicTab extends React.Component {
     constructor(props) {
         super(props);

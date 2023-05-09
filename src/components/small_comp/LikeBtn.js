@@ -4,7 +4,8 @@ import like_1 from '../../assets/images/svg/like_1.svg'
 import axios from 'axios'
 import {message} from 'antd'
 
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 class LikeBtn extends React.Component {
     constructor(props) {
         super(props);

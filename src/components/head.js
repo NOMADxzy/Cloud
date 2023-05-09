@@ -14,7 +14,8 @@ import {Tabs} from 'antd';
 
 const {TabPane} = Tabs;
 
-const HOST = 'http://121.5.241.177:9000';
+// const HOST = 'http://121.5.241.177:9000';
+const HOST = 'http://localhost:9000';
 class Head extends React.Component {
     constructor(props) {
         super(props);
